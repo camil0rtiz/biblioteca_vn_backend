@@ -1,0 +1,80 @@
+<?php
+
+namespace App\Models;
+
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
+use App\Models\Role;
+use App\Models\Membresia;
+use App\Models\Evento;
+use App\Models\Prestamo;
+
+class User extends Authenticatable
+{
+    use HasApiTokens, HasFactory, Notifiable;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'nombre_usuario',
+        'apellido_pate_usuario',
+        'apellido_mate_usuario',
+        'email_usuario',
+        'password_usuario',
+        'numero_casa_usuario',
+        'calle_usuario',
+        'fecha_naci_usuario',
+        'estado_usuario',
+        'id_rol'
+    ];
+
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'password_usuario',
+        'remember_token',
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
+
+    //Relacion muchos a muchos con roles
+    
+    public function roles(){
+        return $this->belongsToMany(Role::class);
+    }
+    
+    //Relacion muchos a muchos con membresia
+    
+    public function membresias(){
+        return $this->belongsToMany(Membresia::class);
+    }
+
+    //relacion uno a muchos con eventos
+
+    public function eventos(){
+        return $this->hasMany(Evento::class);
+    }
+
+
+    //Relacion uno a muchos 
+
+    public function prestamos(){
+        return $this->hasMany(Prestamo::class);
+    }
+}
