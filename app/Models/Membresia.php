@@ -13,6 +13,6 @@ class Membresia extends Model
     //Relacion muchos a muchos con usuario
 
     public function users(){
-        return $this->belongsToMany(User::class); 
+        return $this->belongsToMany(User::class,  'membresia_user', 'id_membresia' , 'id_usuario'); 
     }
 }

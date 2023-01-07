@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\User;
+use App\Models\Ejemplare;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,6 +21,12 @@ class PrestamoFactory extends Factory
         return [
             'id_vecino' => User::all()->random()->id,
             'id_bibliotecario'=> User::all()->random()->id,
+            'id_ejemplar' =>  Ejemplare::all()->random()->id,
+            'fecha_prestamo' => $this->faker->dateTime(),
+            'fecha_rece_prestamo' => $this->faker->dateTime(),
+            'fecha_entrega_prestamo' => $this->faker->dateTime(),
+            'observaciones' => $this->faker->paragraph(),
+            'estado_prestamo' => $this->faker->word(5),
         ];
     }
 }

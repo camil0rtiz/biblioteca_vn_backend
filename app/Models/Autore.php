@@ -13,7 +13,7 @@ class Autore extends Model
     //Relacion muchos a muchos con libros
 
     public function libros(){
-        return $this->belongsToMany(Libro::class); 
+        return $this->belongsToMany(Libro::class, 'autor_libro', 'id_libro', 'id_autor' ); 
     }
 
 }

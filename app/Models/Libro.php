@@ -14,7 +14,7 @@ class Libro extends Model
      //Relacion muchos a muchos con autores
 
     public function autores(){
-        return $this->belongsToMany(Autore::class); 
+        return $this->belongsToMany(Autore::class, 'autor_libro', 'id_autor', 'id_libro' ); 
     }
 
     //relacion uno a muchos con ejemplares

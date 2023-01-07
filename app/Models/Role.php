@@ -13,7 +13,7 @@ class Role extends Model
     //Relacion muchos a muchos con usuario
 
     public function users(){
-        return $this->belongsToMany(User::class); 
+        return $this->belongsToMany(User::class, 'role_user', 'id_rol', 'id_usuario');
     }
 
 }
