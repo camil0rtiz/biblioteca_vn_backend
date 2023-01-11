@@ -10,6 +10,8 @@ class Role extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['tipo_rol'];
+
     //Relacion muchos a muchos con usuario
 
     public function users(){

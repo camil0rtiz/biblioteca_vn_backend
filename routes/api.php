@@ -3,22 +3,18 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-use app\Http\Controllers\Api\RegisterController;
+use App\Http\Controllers\Api\ResgisterController;
+use App\Http\Controllers\Api\RoleController;
 
-
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
-
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+// Route::get('/user', function (Request $request) {
 //     return $request->user();
 // });
 
-Route::post('register', [RegisterController::class, 'store'])->name('register');
+Route::post('register', [ResgisterController::class, 'store'])->name('register');
+Route::get('roles', [RoleController::class, 'index'])->name('roles.index');
+Route::post('roles', [RoleController::class, 'store'])->name('roles.store');
+Route::get('roles/{role}', [RoleController::class, 'show'])->name('roles.show');
+Route::put('roles/{role}', [RoleController::class, 'update'])->name('roles.update');
+Route::delete('roles/{role}', [RoleController::class, 'destroy'])->name('roles.destroy');
+
+// Route::apiResource('/roles', RoleController::class);
