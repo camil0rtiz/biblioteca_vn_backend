@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\RoleController;
 // });
 
 Route::post('registro', [AuthController::class, 'registro']);
+Route::post('login', [AuthController::class, 'login']);
 
 Route::get('roles', [RoleController::class, 'index'])->name('roles.index');
 Route::post('roles', [RoleController::class, 'store'])->name('roles.store');
