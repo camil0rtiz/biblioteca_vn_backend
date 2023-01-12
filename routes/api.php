@@ -3,14 +3,15 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\Api\ResgisterController;
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\RoleController;
 
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
 // });
 
-Route::post('register', [ResgisterController::class, 'store'])->name('register');
+Route::post('registro', [AuthController::class, 'registro']);
+
 Route::get('roles', [RoleController::class, 'index'])->name('roles.index');
 Route::post('roles', [RoleController::class, 'store'])->name('roles.store');
 Route::get('roles/{role}', [RoleController::class, 'show'])->name('roles.show');

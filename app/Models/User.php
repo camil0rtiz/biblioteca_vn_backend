@@ -31,7 +31,6 @@ class User extends Authenticatable
         'calle_usuario',
         'fecha_naci_usuario',
         'estado_usuario',
-        'id_rol'
     ];
 
     /**
