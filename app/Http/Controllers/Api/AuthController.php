@@ -50,7 +50,7 @@ class AuthController extends Controller
     public function login(Request $request){
 
         $credentials = $request->validate([
-            'email' => ['required', 'email'],
+            'rut_usuario' => ['required'],
             'password' => ['required'],
         ]);
 
@@ -58,7 +58,7 @@ class AuthController extends Controller
             return response()->json(['message' => 'No autorizado'], 401);
         }
 
-        $user = User::where('email', $request['email'])->firstOrFail();
+        $user = User::where('rut_usuario', $request['rut_usuario'])->firstOrFail();
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
@@ -67,5 +67,12 @@ class AuthController extends Controller
             'token_type' => 'Bearer',
             'user' => $user
         ]);
+    }
+
+    public function logout(Request $request){
+        $request->user()->currentAccessToken()->delete;
+        return response()->json(['message' => 'Token eliminado correctamente'], 200);
+        // $user->tokens()->delete();
+        // $request->user()->currentAccessToken()->delete();
     }
 }
