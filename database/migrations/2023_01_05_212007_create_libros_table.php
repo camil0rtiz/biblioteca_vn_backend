@@ -15,14 +15,14 @@ return new class extends Migration
     {
         Schema::create('libros', function (Blueprint $table) {
             $table->id();
-            $table->string('titulo_libro',100);
-            $table->string('isbn_libro', 100);
-            $table->string('dewey_libro',45);
-            $table->text('resena_libro');
-            $table->integer('numero_pagi_libro');
-            $table->string('categoria_libro',45);
-            $table->dateTime('fecha_publi_libro');
-            $table->string('estado_libro',45);
+            $table->string('titulo_libro',100)->nullable();
+            $table->string('isbn_libro', 100)->nullable();
+            $table->string('dewey_libro',45)->nullable();
+            $table->text('resena_libro')->nullable();
+            $table->integer('numero_pagi_libro')->nullable();
+            $table->string('categoria_libro',45)->nullable();
+            $table->dateTime('fecha_publi_libro')->nullable();
+            $table->string('estado_libro',45)->nullable();
             $table->timestamps();
         });
     }

@@ -15,13 +15,13 @@ return new class extends Migration
     {
         Schema::create('membresia_user', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_membresia');
-            $table->unsignedBigInteger('id_usuario');
+            $table->unsignedBigInteger('id_membresia')->nullable();
+            $table->unsignedBigInteger('id_usuario')->nullable();
             $table->foreign('id_membresia')->references('id')->on('membresias')->onDelete('cascade');
             $table->foreign('id_usuario')->references('id')->on('users')->onDelete('cascade');
-            $table->dateTime('fecha_pago_paga');
-            $table->dateTime('fecha_venci_paga');
-            $table->dateTime('fecha_acti_paga');
+            $table->dateTime('fecha_pago_paga')->nullable();
+            $table->dateTime('fecha_venci_paga')->nullable();
+            $table->dateTime('fecha_acti_paga')->nullable();
 
             $table->timestamps();
         });

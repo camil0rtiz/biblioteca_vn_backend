@@ -15,12 +15,12 @@ return new class extends Migration
     {
         Schema::create('ejemplares', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_libro');
-            $table->unsignedBigInteger('id_editorial');
+            $table->unsignedBigInteger('id_libro')->nullable();
+            $table->unsignedBigInteger('id_editorial')->nullable();
             $table->foreign('id_libro')->references('id')->on('libros')->onDelete('cascade');
             $table->foreign('id_editorial')->references('id')->on('editoriales')->onDelete('cascade');
-            $table->dateTime('fecha_edi_ejemplar');
-            $table->string('estado_ejemplar',45);
+            $table->dateTime('fecha_edi_ejemplar')->nullable();
+            $table->string('estado_ejemplar',45)->nullable();
             $table->timestamps();
         });
     }

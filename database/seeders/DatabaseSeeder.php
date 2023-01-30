@@ -31,16 +31,19 @@ class DatabaseSeeder extends Seeder
         
         // \App\Models\User::factory(10)->create(); //otra forma de hacer
         
-        Role::factory(100)->create();
-        Membresia::factory(100)->create();
-        $this->call(UserSeeder::class);
-        Categoria::factory(100)->create();
-        Evento::factory(100)->create();
-        Autore::factory(100)->create();
-        $this->call(LibroSeeder::class);
-        Editoriale::factory(100)->create();
-        Ejemplare::factory(100)->create();
-        Prestamo::factory(100)->create();
+        $this->call(RoleSeeder::class);
+        $this->call(MembresiaSeeder::class);
+
+        // Role::factory(100)->create();
+        // Membresia::factory(100)->create();
+        // $this->call(UserSeeder::class);
+        // Categoria::factory(100)->create();
+        // Evento::factory(100)->create();
+        // Autore::factory(100)->create();
+        // $this->call(LibroSeeder::class);
+        // Editoriale::factory(100)->create();
+        // Ejemplare::factory(100)->create();
+        // Prestamo::factory(100)->create();
     }
 
 }

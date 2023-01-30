@@ -16,16 +16,16 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('rut_usuario', 45)->unique();
-            $table->string('nombre_usuario', 45);
-            $table->string('apellido_pate_usuario', 45);
-            $table->string('apellido_mate_usuario', 45);
+            $table->string('nombre_usuario', 45)->nullable();
+            $table->string('apellido_pate_usuario', 45)->nullable();
+            $table->string('apellido_mate_usuario', 45)->nullable();
             $table->string('email', 45)->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->integer('numero_casa_usuario');
-            $table->string('calle_usuario', 45);
-            $table->dateTime('fecha_naci_usuario');
-            $table->string('estado_usuario', 10);
+            $table->string('password')->nullable();
+            $table->integer('numero_casa_usuario')->nullable();
+            $table->string('calle_usuario', 45)->nullable();
+            $table->dateTime('fecha_naci_usuario')->nullable();
+            $table->string('estado_usuario', 10)->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

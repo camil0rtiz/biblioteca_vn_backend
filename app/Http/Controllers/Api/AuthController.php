@@ -5,13 +5,13 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\User;
 
 
 class AuthController extends Controller
 {   
-    public function registro(Request $request){
+    public function registrarUsuario(Request $request){
 
         $request->validate([
             'rut_usuario' => 'required|string|max:11',
@@ -19,10 +19,9 @@ class AuthController extends Controller
             'apellido_pate_usuario'=>'required|string|max:45',
             'apellido_mate_usuario'=>'required|string|max:45',
             'email' => 'required|string|email|max:45',
-            // 'password_usuario' => 'required|string|min:8|confirmed',
+            'password' => 'required|string|min:8|confirmed',
             'calle_usuario' => 'required',
             'fecha_naci_usuario' => 'required',
-
         ]);
 
         $user = User::create([
@@ -59,20 +58,42 @@ class AuthController extends Controller
         }
 
         $user = User::where('rut_usuario', $request['rut_usuario'])->firstOrFail();
-
+        
         $token = $user->createToken('auth_token')->plainTextToken;
+        
+        $user = User::select('users.nombre_usuario', 'users.apellido_pate_usuario', 'users.apellido_mate_usuario', 'roles.tipo_rol' )
+            ->join('role_user', 'users.id', '=', 'role_user.id_usuario')
+            ->join('roles', 'roles.id', '=', 'role_user.id_rol')    
+            ->where('rut_usuario', $request['rut_usuario'])->get()->firstOrFail();
 
         return response()->json([
-            'access_token' => $token,
+            'token' => $token,
             'token_type' => 'Bearer',
-            'user' => $user
+            'data' => $user
         ]);
     }
 
     public function logout(Request $request){
         $request->user()->currentAccessToken()->delete;
         return response()->json(['message' => 'Token eliminado correctamente'], 200);
-        // $user->tokens()->delete();
-        // $request->user()->currentAccessToken()->delete();
+    }
+
+    public function obtenerUsuarios() {
+        
+        $users = User::all();
+
+        return response()->json([
+            'data' => $users
+        ]);
+    }
+
+    public function actualizarUsuario(Request $request, User $user){
+
+        $user->update($request->all());
+
+        return response()->json([
+            'data' => $user
+        ]);
+
     }
 }
