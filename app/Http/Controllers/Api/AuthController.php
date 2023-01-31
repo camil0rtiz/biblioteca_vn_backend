@@ -4,16 +4,15 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Http\Requests\registrarUsuarioRequest;
-use App\Models\User;
-
+use App\Http\Requests\agregarUsuarioRequest;
 
 class AuthController extends Controller
 {   
-    public function registrarUsuario(registrarUsuarioRequest $request){
+    public function agregarUsuario(agregarUsuarioRequest $request){
 
         try {
             $user = User::create([
@@ -40,16 +39,16 @@ class AuthController extends Controller
             ]);
         }
 
-
     }
 
-    public function obtenerUsuarios() {
+    public function listarUsuarios() {
         
         $users = User::all();
 
         return response()->json([
             'data' => $users
         ]);
+
     }
     
     public function actualizarUsuario(Request $request, User $user){
@@ -88,6 +87,7 @@ class AuthController extends Controller
                 'token_type' => 'Bearer',
                 'data' => $user
             ]);
+
         } catch (\Exception $e) {
 
             return response()->json([
@@ -97,7 +97,9 @@ class AuthController extends Controller
     }
         
     public function logout(Request $request){
+        
         $request->user()->currentAccessToken()->delete;
         return response()->json(['message' => 'Token eliminado correctamente'], 200);
+
     }
 }

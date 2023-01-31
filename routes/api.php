@@ -6,15 +6,15 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\RoleController;
 
-Route::post('registrarUsuario', [AuthController::class, 'registrarUsuario']);
-Route::post('login', [AuthController::class, 'login']);
+Route::post('usuarios/agregar', [AuthController::class, 'agregarUsuario']);
+Route::post('usuarios/login', [AuthController::class, 'login']);
 
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['auth:sanctum'])->prefix('usuarios')->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
-    Route::get('obtenerUsuarios', [AuthController::class, 'obtenerUsuarios']);
-    Route::put('actualizarUsuario/{user}', [AuthController::class, 'actualizarUsuario']);
+    Route::get('listar', [AuthController::class, 'listarUsuarios']);
+    Route::put('actualizar/{user}', [AuthController::class, 'actualizarUsuario']);
 });
 
 Route::middleware(['auth:sanctum'])->prefix('roles')->group(function () {
-    Route::get('obtenerRoles', [RoleController::class, 'obtenerRoles']);
+    Route::get('listar', [RoleController::class, 'listarRoles']);
 });

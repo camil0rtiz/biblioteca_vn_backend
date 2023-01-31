@@ -7,8 +7,7 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Response;
 use Illuminate\Contracts\Validation\Validator;
 
-
-class registrarUsuarioRequest extends FormRequest
+class agregarUsuarioRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -58,5 +57,4 @@ class registrarUsuarioRequest extends FormRequest
             response()->json(['error' => $validator->errors()->first()], Response::HTTP_BAD_REQUEST)
         );
     }
-
 }
