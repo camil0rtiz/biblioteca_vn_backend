@@ -8,12 +8,14 @@ use Illuminate\Http\Request;
 
 class RoleController extends Controller
 {
-    
+
     public function obtenerRoles()
     {
         $roles = Role::all();
 
-        return $roles;
+        return response()->json([
+            'data' => $roles
+        ]);
     }
 
 }

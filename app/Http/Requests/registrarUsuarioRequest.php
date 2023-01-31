@@ -55,7 +55,7 @@ class registrarUsuarioRequest extends FormRequest
     protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(
-            response()->json(['error' => $validator->errors()->all()], Response::HTTP_BAD_REQUEST)
+            response()->json(['error' => $validator->errors()->first()], Response::HTTP_BAD_REQUEST)
         );
     }
 
