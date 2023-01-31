@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Requests\agregarUsuarioRequest;
+use App\Http\Requests\actualizarUsuarioRequest;
 
 class AuthController extends Controller
 {   
@@ -51,13 +52,23 @@ class AuthController extends Controller
 
     }
     
-    public function actualizarUsuario(Request $request, User $user){
+    public function actualizarUsuario(actualizarUsuarioRequest $request, User $user){
 
-        $user->update($request->all());
+        try {
 
-        return response()->json([
-            'data' => $user
-        ]);
+            $user->update($request->all());
+
+            return response()->json([
+                'data' => $user
+            ]);
+
+        } catch (\Exception $e) {
+
+            return response()->json([
+                "message" => 'Por favor hable con el Administrador'
+            ]);
+
+        }
 
     }
 
@@ -94,6 +105,7 @@ class AuthController extends Controller
                 "message" => 'Por favor hable con el Administrador'
             ]);
         }
+        
     }
         
     public function logout(Request $request){
