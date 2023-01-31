@@ -6,44 +6,44 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use App\Http\Requests\registrarUsuarioRequest;
 use App\Models\User;
 
 
 class AuthController extends Controller
 {   
-    public function registrarUsuario(Request $request){
+    public function registrarUsuario(registrarUsuarioRequest $request){
 
-        $request->validate([
-            'rut_usuario' => 'required|string|max:11',
-            'nombre_usuario'=>'required|string|max:45',
-            'apellido_pate_usuario'=>'required|string|max:45',
-            'apellido_mate_usuario'=>'required|string|max:45',
-            'email' => 'required|string|email|max:45',
-            'password' => 'required|string|min:8|confirmed',
-            'calle_usuario' => 'required',
-            'fecha_naci_usuario' => 'required',
-        ]);
+        try {
+            $user = User::create([
+                'rut_usuario' =>   $request->rut_usuario, 
+                'nombre_usuario'=>  $request->nombre_usuario, 
+                'apellido_pate_usuario'=>  $request->apellido_pate_usuario, 
+                'apellido_mate_usuario'=>  $request->apellido_mate_usuario, 
+                'email' =>   $request->email, 
+                'password' => Hash::make( $request->password),
+                'numero_casa_usuario' =>  $request->numero_casa_usuario,
+                'calle_usuario' =>  $request->calle_usuario,             
+                'fecha_naci_usuario' =>  $request->fecha_naci_usuario, 
+                'estado_usuario' => 'registrado',
+            ]);
+    
+            // $token = $user->createToken('auth_token')->plainTextToken;
+    
+            return response()->json([
+                // 'access_token' => $token,
+                // 'token_type' => 'Bearer',
+                'data' => $user
+            ]);
 
-        $user = User::create([
-            'rut_usuario' =>   $request->rut_usuario, 
-            'nombre_usuario'=>  $request->nombre_usuario, 
-            'apellido_pate_usuario'=>  $request->apellido_pate_usuario, 
-            'apellido_mate_usuario'=>  $request->apellido_mate_usuario, 
-            'email' =>   $request->email, 
-            'password' => Hash::make( $request->password),
-            'numero_casa_usuario' =>  $request->numero_casa_usuario,
-            'calle_usuario' =>  $request->calle_usuario,             
-            'fecha_naci_usuario' =>  $request->fecha_naci_usuario, 
-            'estado_usuario' => 'registrado',
-        ]);
+        } catch (\Exception $e) {
 
-        $token = $user->createToken('auth_token')->plainTextToken;
+            return response()->json([
+                "error" => $e->getMessage()
+            ]);
+        }
 
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'Bearer',
-            'data' => $user
-        ]);
 
     }
     public function login(Request $request){
@@ -62,8 +62,8 @@ class AuthController extends Controller
         $token = $user->createToken('auth_token')->plainTextToken;
         
         $user = User::select('users.nombre_usuario', 'users.apellido_pate_usuario', 'users.apellido_mate_usuario', 'roles.tipo_rol' )
-            ->join('role_user', 'users.id', '=', 'role_user.id_usuario')
-            ->join('roles', 'roles.id', '=', 'role_user.id_rol')    
+            ->leftJoin('role_user', 'users.id', '=', 'role_user.id_usuario')
+            ->leftJoin('roles', 'roles.id', '=', 'role_user.id_rol')    
             ->where('rut_usuario', $request['rut_usuario'])->get()->firstOrFail();
 
         return response()->json([

@@ -9,6 +9,7 @@ use App\Models\Libro;
 class Autore extends Model
 {
     use HasFactory;
+    public $timestamps = false;
 
     //Relacion muchos a muchos con libros
 

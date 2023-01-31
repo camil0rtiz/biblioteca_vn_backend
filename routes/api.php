@@ -25,9 +25,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
 //prefix sirve para ordenar las rutas segun su tipo ejemplo: rutas que tengan que ver con usuario, rutas que tengan que ver con libros
 
 Route::middleware(['auth:sanctum'])->prefix('roles')->group(function () {
-    Route::get('roles', [RoleController::class, 'index'])->name('roles.index');
-    Route::post('roles', [RoleController::class, 'store'])->name('roles.store');
-    Route::get('roles/{role}', [RoleController::class, 'show'])->name('roles.show');
-    Route::put('roles/{role}', [RoleController::class, 'update'])->name('roles.update');
-    Route::delete('roles/{role}', [RoleController::class, 'destroy'])->name('roles.destroy');
+    Route::get('obtenerRoles', [RoleController::class, 'obtenerRoles']);
 });
