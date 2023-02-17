@@ -22,11 +22,16 @@ class AuthController extends Controller
                 'apellido_pate_usuario'=>  $request->apellido_pate_usuario, 
                 'apellido_mate_usuario'=>  $request->apellido_mate_usuario, 
                 'email' =>   $request->email, 
-                'password' => Hash::make( $request->password),
+                'password' => Hash::make($request->password),
                 'numero_casa_usuario' =>  $request->numero_casa_usuario,
                 'calle_usuario' =>  $request->calle_usuario,             
                 'fecha_naci_usuario' =>  $request->fecha_naci_usuario, 
-                'estado_usuario' => 'registrado',
+            ]);
+
+            $user->membresias()->attach($request->id_membresia, [
+                'fecha_pago_paga' => today(),
+                'fecha_venci_paga' => today(),
+                'fecha_acti_paga' => today(),
             ]);
     
             return response()->json([
@@ -68,6 +73,23 @@ class AuthController extends Controller
                 "message" => 'Por favor hable con el Administrador'
             ]);
 
+        }
+
+    }
+
+    public function eliminarUsuario(User $user){
+        
+        try {
+            $ifexist = User::where('id', $user->id)->first();
+            if ($ifexist != null){
+                $usuarios = User::find($user->id)->delete();
+                return response()->json(["data" => $usuarios], 200);
+            }
+            return response()->json(["msg" => "El id del usuario que intenta eliminar no existe"], 401);
+        }
+        catch (\Exception $e)
+        {
+            return response()->json(["error" => $e]);
         }
 
     }
