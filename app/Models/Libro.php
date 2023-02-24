@@ -11,6 +11,17 @@ class Libro extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'titulo_libro',
+        'isbn_libro',
+        'dewey_libro',
+        'resena_libro',
+        'numero_pagi_libro',
+        'categoria_libro',
+        'fecha_publi_libro',
+        'estado_libro',
+    ];
+
      //Relacion muchos a muchos con autores
 
     public function autores(){

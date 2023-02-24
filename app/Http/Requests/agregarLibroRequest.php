@@ -7,9 +7,9 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Response;
 use Illuminate\Contracts\Validation\Validator;
 
-class agregarUsuarioRequest extends FormRequest
+class agregarLibroRequest extends FormRequest
 {
-    
+
     public function authorize()
     {
         return true;
@@ -18,29 +18,27 @@ class agregarUsuarioRequest extends FormRequest
     public function rules()
     {
         return [
-            'rut_usuario' => 'required|unique:users,rut_usuario|string|max:11',
-            'nombre_usuario'=>'required|string|max:45',
-            'apellido_pate_usuario'=>'required|string|max:45',
-            'apellido_mate_usuario'=>'required|string|max:45',
-            'email' => 'required|string|unique:users,email|email|max:45',
-            'password' => 'required|string|min:8',
-            'numero_casa_usuario' => 'required|numeric',
-            'calle_usuario' => 'required|string',
-            'fecha_naci_usuario' => 'required|date',
+            'titulo_libro' => 'required|string',
+            'isbn_libro' =>'required|string',
+            'dewey_libro' =>'required|string',
+            'resena_libro' =>'required|string',
+            'numero_pagi_libro' => 'required|numeric',
+            'categoria_libro' => 'required|string',
+            'fecha_publi_libro' => 'required|date',
+            'estado_libro' => 'required|string',
         ];
     }
 
     public function messages()
     {
         return [
-            'unique' => 'El campo :attribute ya existe',
+            // 'unique' => 'El campo :attribute ya existe',
             'required' => 'El campo :attribute es requerido',
             'string' => 'El campo :attribute debe ser de tipo string',
-            'email' => 'El formato del email es incorrecto',
             'numeric' => 'El campo :attribute debe ser de tipo number',
             'date' => 'El campo :attribute debe ser del tipo date',
-            'max' => 'El campo :attribute debe contener como máximo 45 caracteres',
-            'min' => 'El campo :attribute debe contener como mínimo 8 caracteres'
+            // 'max' => 'El campo :attribute debe contener como máximo 45 caracteres',
+            // 'min' => 'El campo :attribute debe contener como mínimo 8 caracteres'
         ];
     }
 

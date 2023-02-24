@@ -25,7 +25,8 @@ class AuthController extends Controller
                 'password' => Hash::make($request->password),
                 'numero_casa_usuario' =>  $request->numero_casa_usuario,
                 'calle_usuario' =>  $request->calle_usuario,             
-                'fecha_naci_usuario' =>  $request->fecha_naci_usuario, 
+                'fecha_naci_usuario' =>  $request->fecha_naci_usuario,
+                'estado_usuario' => $request->estado_usuario 
             ]);
 
             $user->membresias()->attach($request->id_membresia, [
