@@ -50,27 +50,26 @@ class LibroController extends Controller
         }
     }
 
-    public function store(Request $request)
+    public function actualizarLibro(Request $request, Libro $libro)
     {
-        //
+        try {
+
+            $libro->update($request->all());
+
+            return response()->json([
+                'data' => $libro
+            ]);
+
+        } catch (\Exception $e) {
+
+            return response()->json([
+                "message" => 'Por favor hable con el Administrador'
+            ]);
+
+        }
     }
 
-    public function show(Libro $libro)
-    {
-        //
-    }
-
-    public function edit(Libro $libro)
-    {
-        //
-    }
-
-    public function update(Request $request, Libro $libro)
-    {
-        //
-    }
-
-    public function destroy(Libro $libro)
+    public function eliminarLibro(Libro $libro)
     {
         //
     }
