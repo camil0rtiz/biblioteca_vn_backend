@@ -34,14 +34,17 @@ class LibroController extends Controller
                 'estado_libro' => $request->estado_libro,
             ]);
 
+            $libro->autores()->attach($request->id_autor);
+
             return response()->json([
-                'data' => $libro
+                'data' => $libro,
             ]);
 
         }catch (\Exception $e) {
 
             return response()->json([
-                "message" => 'Por favor hable con el Administrador'
+                "message" => 'Por favor hable con el Administrador',
+                'error' => $e
             ]);
         
         }

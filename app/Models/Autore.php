@@ -11,6 +11,10 @@ class Autore extends Model
     use HasFactory;
     public $timestamps = false;
 
+    protected $fillable = [
+        'nombre_autor',
+    ];
+
     //Relacion muchos a muchos con libros
 
     public function libros(){

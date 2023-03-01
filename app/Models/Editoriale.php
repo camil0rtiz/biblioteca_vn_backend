@@ -10,6 +10,10 @@ class Editoriale extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'nombre_editorial',
+    ];
+
     //Relacion uno a muchos 
 
     public function ejemplares(){

@@ -7,6 +7,8 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\MembresiaController;
 use App\Http\Controllers\Api\LibroController;
+use App\Http\Controllers\Api\AutorController;
+use App\Http\Controllers\Api\EditorialController;
 
 Route::post('usuarios/agregar', [AuthController::class, 'agregarUsuario']);
 Route::post('usuarios/login', [AuthController::class, 'login']);
@@ -29,4 +31,16 @@ Route::middleware(['auth:sanctum'])->prefix('membresias')->group(function () {
 Route::middleware(['auth:sanctum'])->prefix('libros')->group(function () {
     Route::post('agregar', [LibroController::class, 'agregarLibro']);
     Route::get('listar', [LibroController::class, 'listarLibros']);
+});
+
+Route::middleware(['auth:sanctum'])->prefix('autores')->group(function () {
+    Route::post('agregar', [AutorController::class, 'agregarAutor']);
+    Route::get('listar', [AutorController::class, 'listarAutores']);
+    Route::put('actualizar/{autore}', [AutorController::class, 'actualizarAutor']);
+});
+
+Route::middleware(['auth:sanctum'])->prefix('editoriales')->group(function () {
+    Route::post('agregar', [EditorialController::class, 'agregarEditorial']);
+    Route::get('listar', [EditorialController::class, 'listarEditoriales']);
+    Route::put('actualizar/{editorial}', [EditorialController::class, 'actualizarEditorial']);
 });
