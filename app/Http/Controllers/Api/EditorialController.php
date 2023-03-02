@@ -41,14 +41,14 @@ class EditorialController extends Controller
         }
     }
 
-    public function actualizarEditorial(actualizarEditorialRequest $request)
+    public function actualizarEditorial(actualizarEditorialRequest $request, Editoriale $editoriale )
     {
         try {
 
-            $editorial->update($request->all());
+            $editoriale->update($request->all());
 
             return response()->json([
-                'data' => $editorial
+                'data' => $editoriale
             ]);
 
         } catch (\Exception $e) {

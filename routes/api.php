@@ -43,5 +43,5 @@ Route::middleware(['auth:sanctum'])->prefix('autores')->group(function () {
 Route::middleware(['auth:sanctum'])->prefix('editoriales')->group(function () {
     Route::post('agregar', [EditorialController::class, 'agregarEditorial']);
     Route::get('listar', [EditorialController::class, 'listarEditoriales']);
-    Route::put('actualizar/{editorial}', [EditorialController::class, 'actualizarEditorial']);
+    Route::put('actualizar/{editoriale}', [EditorialController::class, 'actualizarEditorial']);
 });
