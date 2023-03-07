@@ -16,6 +16,7 @@ Route::post('usuarios/login', [AuthController::class, 'login']);
 Route::middleware(['auth:sanctum'])->prefix('usuarios')->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
     Route::get('listar', [AuthController::class, 'listarUsuarios']);
+    Route::get('listarBibliotecarios', [AuthController::class, 'listarBibliotecarios']);
     Route::put('actualizar/{user}', [AuthController::class, 'actualizarUsuario']);
     Route::delete('eliminar/{user}', [AuthController::class,'eliminarUsuario']);
 });

@@ -50,7 +50,21 @@ class AuthController extends Controller
 
     public function listarUsuarios() {
         
-        $users = User::all();
+        $users = User::select('users.id','users.nombre_usuario', 'users.rut_usuario' ,'users.apellido_pate_usuario', 'users.apellido_mate_usuario', 'users.email','roles.tipo_rol' )
+                                ->leftJoin('role_user', 'users.id', '=', 'role_user.id_usuario')
+                                ->leftJoin('roles', 'roles.id', '=', 'role_user.id_rol')->where('roles.tipo_rol', null)->get() ; 
+
+        return response()->json([
+            'data' => $users
+        ]);
+
+    }
+
+    public function listarBibliotecarios() {
+        
+        $users = User::select('users.id','users.nombre_usuario', 'users.rut_usuario' ,'users.apellido_pate_usuario', 'users.apellido_mate_usuario', 'users.email','roles.tipo_rol' )
+                                ->leftJoin('role_user', 'users.id', '=', 'role_user.id_usuario')
+                                ->leftJoin('roles', 'roles.id', '=', 'role_user.id_rol')->where('tipo_rol', '=', 'Admin')->orWhere('tipo_rol', '=', 'Voluntario')->orderBy('id', 'asc')->get() ; 
 
         return response()->json([
             'data' => $users

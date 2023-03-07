@@ -12,10 +12,35 @@ class LibroController extends Controller
     
     public function listarLibros()
     {
-        $libros = Libro::all();
+        $libros = Libro::select('libros.id','libros.titulo_libro','libros.dewey_libro','libros.isbn_libro','libros.resena_libro','libros.numero_pagi_libro','libros.categoria_libro','libros.fecha_publi_libro')
+        ->leftJoin('autor_libro', 'libros.id', '=', 'autor_libro.id_libro')
+        ->leftJoin('autores', 'autores.id', '=', 'autor_libro.id_autor')
+        ->selectRaw('GROUP_CONCAT(autor_libro.id_autor) as idAutor')
+        ->selectRaw('GROUP_CONCAT(autores.nombre_autor) as nombreAutor')
+        ->groupBy('libros.id','libros.titulo_libro','libros.dewey_libro','libros.isbn_libro','libros.resena_libro','libros.numero_pagi_libro','libros.categoria_libro','libros.fecha_publi_libro')
+        ->get();
+
+        $nuevoConjunto = [];
+
+        foreach($libros as $clave => $libro) {
+            $nuevoConjunto[$clave] = [
+                "id" => $libro->id,
+                "titulo_libro" => $libro->titulo_libro,
+                "dewey_libro" => $libro->dewey_libro,
+                "isbn_libro" => $libro->isbn_libro,
+                "resena_libro" => $libro->resena_libro,
+                "numero_pagi_libro" => $libro->numero_pagi_libro,
+                "categoria_libro" => $libro->categoria_libro,
+                "fecha_publi_libro" => $libro->fecha_publi_libro,
+                "autor" => [
+                    "value" => explode(",", $libro->idAutor), 
+                    "label" => explode(",", $libro->nombreAutor)
+                ], 
+            ];
+        }
 
         return response()->json([
-            'data' => $libros
+            'data' => $nuevoConjunto,
         ]);
     }
 
@@ -56,6 +81,8 @@ class LibroController extends Controller
 
             $libro->update($request->all());
 
+            $libro->autores()->sync($request->id_autor);
+            
             return response()->json([
                 'data' => $libro
             ]);
