@@ -29,11 +29,17 @@ class AuthController extends Controller
                 'estado_usuario' => $request->estado_usuario 
             ]);
 
-            $user->membresias()->attach($request->id_membresia, [
-                'fecha_pago_paga' => today(),
-                'fecha_venci_paga' => today(),
-                'fecha_acti_paga' => today(),
-            ]);
+            if($request->id_membresia){
+                $user->membresias()->attach($request->id_membresia, [
+                    'fecha_pago_paga' => today(),
+                    'fecha_venci_paga' => today(),
+                    'fecha_acti_paga' => today(),
+                ]);
+            }
+
+            if($request->id_rol){
+                $user->roles()->attach($request->id_rol);
+            }
     
             return response()->json([
                 'data' => $user
@@ -50,9 +56,9 @@ class AuthController extends Controller
 
     public function listarUsuarios() {
         
-        $users = User::select('users.id','users.nombre_usuario', 'users.rut_usuario' ,'users.apellido_pate_usuario', 'users.apellido_mate_usuario', 'users.email','roles.tipo_rol' )
+        $users = User::select('users.id','users.nombre_usuario', 'users.rut_usuario' ,'users.apellido_pate_usuario', 'users.apellido_mate_usuario', 'users.email', 'users.calle_usuario', 'users.numero_casa_usuario')
                                 ->leftJoin('role_user', 'users.id', '=', 'role_user.id_usuario')
-                                ->leftJoin('roles', 'roles.id', '=', 'role_user.id_rol')->where('roles.tipo_rol', null)->get() ; 
+                                ->leftJoin('roles', 'roles.id', '=', 'role_user.id_rol')->where('roles.tipo_rol', null)->orderBy('id', 'asc')->get() ; 
 
         return response()->json([
             'data' => $users
@@ -62,7 +68,7 @@ class AuthController extends Controller
 
     public function listarBibliotecarios() {
         
-        $users = User::select('users.id','users.nombre_usuario', 'users.rut_usuario' ,'users.apellido_pate_usuario', 'users.apellido_mate_usuario', 'users.email','roles.tipo_rol' )
+        $users = User::select('users.id','users.nombre_usuario', 'users.rut_usuario' ,'users.apellido_pate_usuario', 'users.apellido_mate_usuario', 'users.email', 'users.calle_usuario','users.numero_casa_usuario','roles.id as id_rol', 'roles.tipo_rol' )
                                 ->leftJoin('role_user', 'users.id', '=', 'role_user.id_usuario')
                                 ->leftJoin('roles', 'roles.id', '=', 'role_user.id_rol')->where('tipo_rol', '=', 'Admin')->orWhere('tipo_rol', '=', 'Voluntario')->orderBy('id', 'asc')->get() ; 
 
@@ -77,6 +83,10 @@ class AuthController extends Controller
         try {
 
             $user->update($request->all());
+
+            if($request->id_rol){
+                $user->roles()->sync($request->id_rol);
+            }
 
             return response()->json([
                 'data' => $user
