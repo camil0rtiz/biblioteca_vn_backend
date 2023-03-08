@@ -12,16 +12,21 @@ class Ejemplare extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'id_libro',
+        'id_editorial'
+    ];
+
     //Relación uno a muchos inversa con libro
 
     public function libro(){
-        $this->belongsTo(Libro::class);
+        return $this->belongsTo(Libro::class);
     }
 
     //Relación uno a muchos inversa con editorial
 
     public function editorial(){
-        $this->belongsTo(Editoriale::class);
+        return $this->belongsTo(Editoriale::class, 'id_editorial');
     }
 
     //Relacion uno a muchos 

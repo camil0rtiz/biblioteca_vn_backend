@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\MembresiaController;
 use App\Http\Controllers\Api\LibroController;
 use App\Http\Controllers\Api\AutorController;
 use App\Http\Controllers\Api\EditorialController;
+use App\Http\Controllers\Api\EjemplarController;
 
 Route::post('usuarios/agregar', [AuthController::class, 'agregarUsuario']);
 Route::post('usuarios/login', [AuthController::class, 'login']);
@@ -45,4 +46,8 @@ Route::middleware(['auth:sanctum'])->prefix('editoriales')->group(function () {
     Route::post('agregar', [EditorialController::class, 'agregarEditorial']);
     Route::get('listar', [EditorialController::class, 'listarEditoriales']);
     Route::put('actualizar/{editoriale}', [EditorialController::class, 'actualizarEditorial']);
+});
+
+Route::middleware(['auth:sanctum'])->prefix('ejemplares')->group(function () {
+    Route::post('agregar', [EjemplarController::class, 'agregarEjemplar']);
 });

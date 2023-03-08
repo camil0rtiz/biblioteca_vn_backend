@@ -17,6 +17,6 @@ class Editoriale extends Model
     //Relacion uno a muchos 
 
     public function ejemplares(){
-        return $this->hasMany(Ejemplare::class);
+        return $this->hasMany(Ejemplare::class, 'id_articulo');
     }
 }

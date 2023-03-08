@@ -31,7 +31,7 @@ class Libro extends Model
     //relacion uno a muchos con ejemplares
 
     public function ejemplares(){
-        return $this->hasMany(Ejemplare::class);
+        return $this->hasMany(Ejemplare::class,'id_libro');
     }
 
 }
