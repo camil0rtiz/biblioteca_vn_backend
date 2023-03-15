@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Autore;
 use App\Models\Ejemplare;
+use App\Models\Archivo;
 
 class Libro extends Model
 {
@@ -32,6 +33,12 @@ class Libro extends Model
 
     public function ejemplares(){
         return $this->hasMany(Ejemplare::class,'id_libro');
+    }
+
+    //relacion polimorfica con archivo
+
+    public function archivo(){
+        return $this->morphOne(Archivo::class, 'imageable');
     }
 
 }

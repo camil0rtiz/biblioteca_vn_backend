@@ -11,7 +11,11 @@ class EjemplarController extends Controller
 
     public function listarEjemplares()
     {
-        $ejemplares = Ejemplare::all();
+
+        $ejemplares = Ejemplare::select('libros.titulo_libro','libros.isbn_libro','libros.dewey_libro','editoriales.nombre_editorial')
+        ->join('editoriales', 'ejemplares.id_editorial', '=', 'editoriales.id')
+        ->join('libros', 'ejemplares.id_libro', '=', 'libros.id')
+        ->get();
 
         return response()->json([
             'data' => $ejemplares

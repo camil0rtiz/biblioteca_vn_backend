@@ -6,18 +6,20 @@ use App\Http\Controllers\Controller;
 use App\Models\Libro;
 use Illuminate\Http\Request;
 use App\Http\Requests\agregarLibroRequest;
+use Illuminate\Support\Facades\Storage;
 
 class LibroController extends Controller
 {
     
     public function listarLibros()
     {
-        $libros = Libro::select('libros.id','libros.titulo_libro','libros.dewey_libro','libros.isbn_libro','libros.resena_libro','libros.numero_pagi_libro','libros.categoria_libro','libros.fecha_publi_libro')
+        $libros = Libro::select('libros.id','libros.titulo_libro','libros.dewey_libro','libros.isbn_libro','libros.resena_libro','libros.numero_pagi_libro','libros.categoria_libro','libros.fecha_publi_libro', 'archivos.url')
         ->leftJoin('autor_libro', 'libros.id', '=', 'autor_libro.id_libro')
         ->leftJoin('autores', 'autores.id', '=', 'autor_libro.id_autor')
+        ->leftJoin('archivos', 'libros.id', '=', 'archivos.imageable_id')
         ->selectRaw('GROUP_CONCAT(autor_libro.id_autor) as idAutor')
         ->selectRaw('GROUP_CONCAT(autores.nombre_autor) as nombreAutor')
-        ->groupBy('libros.id','libros.titulo_libro','libros.dewey_libro','libros.isbn_libro','libros.resena_libro','libros.numero_pagi_libro','libros.categoria_libro','libros.fecha_publi_libro')
+        ->groupBy('libros.id','libros.titulo_libro','libros.dewey_libro','libros.isbn_libro','libros.resena_libro','libros.numero_pagi_libro','libros.categoria_libro','libros.fecha_publi_libro', 'archivos.url')
         ->get();
 
         $nuevoConjunto = [];
@@ -32,6 +34,7 @@ class LibroController extends Controller
                 "numero_pagi_libro" => $libro->numero_pagi_libro,
                 "categoria_libro" => $libro->categoria_libro,
                 "fecha_publi_libro" => $libro->fecha_publi_libro,
+                "url" =>  $libro->url,
                 "autor" => [
                     "value" => explode(",", $libro->idAutor), 
                     "label" => explode(",", $libro->nombreAutor)
@@ -43,8 +46,8 @@ class LibroController extends Controller
             'data' => $nuevoConjunto,
         ]);
     }
-
-    public function agregarLibro(agregarLibroRequest $request)
+    
+    public function agregarLibro(Request $request)
     {
         try {
 
@@ -60,9 +63,21 @@ class LibroController extends Controller
             ]);
 
             $libro->autores()->attach($request->id_autor);
+        
+            if($request->hasFile('file')){
+
+                $file = $request->file('file');
+                $filename = $file->getClientOriginalName();
+                $url = $request->file('file')->storeAs('image/',$filename,'public');
+
+                $libro->archivo()->create([
+                    'url' => $url,
+                ]);
+        
+            }
 
             return response()->json([
-                'data' => $libro,
+                'data' => $libro,  
             ]);
 
         }catch (\Exception $e) {
