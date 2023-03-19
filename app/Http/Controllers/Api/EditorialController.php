@@ -13,10 +13,24 @@ class EditorialController extends Controller
     
     public function listarEditoriales()
     {
+
         $editoriales = Editoriale::all();
 
         return response()->json([
-            'data' => $editoriales
+            'data' => $editoriales,   
+        ]);
+    }
+
+    public function buscarEditorial(Request $request)
+    {
+
+        $text = $request->nombre;
+
+        $editoriales = Editoriale::select('id','nombre_editorial')->where('nombre_editorial','like',"%$text%")->get();
+
+        return response()->json([
+            'data' => $editoriales,
+            'buscar' => $text  
         ]);
     }
 
@@ -60,21 +74,6 @@ class EditorialController extends Controller
         }
     }
 
-    public function show(Editoriale $editoriale)
-    {
-        //
-    }
-
-    public function edit(Editoriale $editoriale)
-    {
-        //
-    }
-
-    public function update(Request $request, Editoriale $editoriale)
-    {
-        //
-    }
-    
     public function destroy(Editoriale $editoriale)
     {
         //
