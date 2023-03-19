@@ -17,6 +17,7 @@ class LibroController extends Controller
         ->leftJoin('autor_libro', 'libros.id', '=', 'autor_libro.id_libro')
         ->leftJoin('autores', 'autores.id', '=', 'autor_libro.id_autor')
         ->leftJoin('archivos', 'libros.id', '=', 'archivos.imageable_id')
+        ->withCount('ejemplares')
         ->selectRaw('GROUP_CONCAT(autor_libro.id_autor) as idAutor')
         ->selectRaw('GROUP_CONCAT(autores.nombre_autor) as nombreAutor')
         ->groupBy('libros.id','libros.titulo_libro','libros.dewey_libro','libros.isbn_libro','libros.resena_libro','libros.numero_pagi_libro','libros.categoria_libro','libros.fecha_publi_libro', 'archivos.url')
@@ -44,6 +45,7 @@ class LibroController extends Controller
 
         return response()->json([
             'data' => $nuevoConjunto,
+            'libro' => $libros
         ]);
     }
     
