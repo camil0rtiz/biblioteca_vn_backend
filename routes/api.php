@@ -30,7 +30,7 @@ Route::middleware(['auth:sanctum'])->prefix('membresias')->group(function () {
     Route::get('listar', [MembresiaController::class, 'listarMembresias']);
 });
 
-Route::middleware(['auth:sanctum'])->prefix('libros')->group(function () {
+Route::prefix('libros')->group(function () {
     Route::post('agregar', [LibroController::class, 'agregarLibro']);
     Route::get('listar', [LibroController::class, 'listarLibros']);
     Route::put('actualizar/{libro}', [LibroController::class, 'actualizarLibro']);

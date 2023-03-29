@@ -30,7 +30,6 @@ class EditorialController extends Controller
 
         return response()->json([
             'data' => $editoriales,
-            'buscar' => $text  
         ]);
     }
 
