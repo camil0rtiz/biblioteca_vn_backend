@@ -26,7 +26,7 @@ return new class extends Migration
             $table->dateTime('fecha_rece_prestamo')->nullable(); //fecha den que se recibio el libro
             $table->dateTime('fecha_entrega_prestamo')->nullable();//fecha en que se deberia entregar el libro
             $table->text('observaciones')->nullable();
-            $table->string('estado_prestamo')->nullable();
+            $table->tinyInteger('estado_prestamo')->nullable();
             $table->timestamps();
         
         });

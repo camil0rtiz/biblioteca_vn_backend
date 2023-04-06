@@ -19,7 +19,7 @@ class Libro extends Model
         'resena_libro',
         'numero_pagi_libro',
         'categoria_libro',
-        'fecha_publi_libro',
+        'anio_publi_libro',
         'estado_libro',
     ];
 

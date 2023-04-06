@@ -20,9 +20,9 @@ return new class extends Migration
             $table->foreign('id_categoria')->references('id')->on('categorias')->onDelete('cascade');
             $table->foreign('id_usuario')->references('id')->on('users')->onDelete('cascade');
             $table->string('nombre_evento',45)->nullable();
-            $table->dateTime('fecha_evento')->nullable();
-            $table->dateTime('fecha_publi_evento')->nullable();
-            $table->string('estado_evento',45)->nullable();
+            $table->date('fecha_evento')->nullable();
+            $table->date('fecha_publi_evento')->nullable();
+            $table->tinyInteger('estado_evento')->nullable();
             $table->timestamps();
         });
     }

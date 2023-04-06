@@ -21,8 +21,8 @@ return new class extends Migration
             $table->text('resena_libro')->nullable();
             $table->integer('numero_pagi_libro')->nullable();
             $table->string('categoria_libro',45)->nullable();
-            $table->dateTime('fecha_publi_libro')->nullable();
-            $table->string('estado_libro',45)->nullable();
+            $table->string('anio_publi_libro',20)->nullable();
+            $table->tinyInteger('estado_libro')->nullable();
             $table->timestamps();
         });
     }

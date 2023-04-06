@@ -19,8 +19,8 @@ return new class extends Migration
             $table->unsignedBigInteger('id_editorial')->nullable();
             $table->foreign('id_libro')->references('id')->on('libros')->onDelete('cascade');
             $table->foreign('id_editorial')->references('id')->on('editoriales')->onDelete('cascade');
-            $table->dateTime('fecha_edi_ejemplar')->nullable();
-            $table->string('estado_ejemplar',45)->nullable();
+            $table->string('codigo_uni_ejemplar',45)->nullable();
+            $table->tinyInteger('estado_ejemplar')->nullable();
             $table->timestamps();
         });
     }

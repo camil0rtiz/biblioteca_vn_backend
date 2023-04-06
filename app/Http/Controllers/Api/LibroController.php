@@ -13,14 +13,14 @@ class LibroController extends Controller
     
     public function listarLibros()
     {
-        $libros = Libro::select('libros.id','libros.titulo_libro','libros.dewey_libro','libros.isbn_libro','libros.resena_libro','libros.numero_pagi_libro','libros.categoria_libro','libros.fecha_publi_libro', 'archivos.url')
+        $libros = Libro::select('libros.id','libros.titulo_libro','libros.dewey_libro','libros.isbn_libro','libros.resena_libro','libros.numero_pagi_libro','libros.categoria_libro','libros.anio_publi_libro', 'archivos.url')
         ->leftJoin('autor_libro', 'libros.id', '=', 'autor_libro.id_libro')
         ->leftJoin('autores', 'autores.id', '=', 'autor_libro.id_autor')
         ->leftJoin('archivos', 'libros.id', '=', 'archivos.imageable_id')
         ->withCount('ejemplares as cant_ejemplares')
         ->selectRaw('GROUP_CONCAT(autor_libro.id_autor) as idAutor')
         ->selectRaw('GROUP_CONCAT(autores.nombre_autor) as nombreAutor')
-        ->groupBy('libros.id','libros.titulo_libro','libros.dewey_libro','libros.isbn_libro','libros.resena_libro','libros.numero_pagi_libro','libros.categoria_libro','libros.fecha_publi_libro', 'archivos.url')
+        ->groupBy('libros.id','libros.titulo_libro','libros.dewey_libro','libros.isbn_libro','libros.resena_libro','libros.numero_pagi_libro','libros.categoria_libro','libros.anio_publi_libro', 'archivos.url')
         ->get();
 
         $nuevoConjunto = [];
@@ -34,7 +34,7 @@ class LibroController extends Controller
                 "resena_libro" => $libro->resena_libro,
                 "numero_pagi_libro" => $libro->numero_pagi_libro,
                 "categoria_libro" => $libro->categoria_libro,
-                "fecha_publi_libro" => $libro->fecha_publi_libro,
+                "anio_publi_libro" => $libro->anio_publi_libro,
                 "url" =>  $libro->url,
                 "autor" => [
                     "value" => explode(",", $libro->idAutor), 
@@ -60,7 +60,7 @@ class LibroController extends Controller
                 'resena_libro' => $request->resena_libro,
                 'numero_pagi_libro' => $request->numero_pagi_libro,
                 'categoria_libro' => $request->categoria_libro,
-                'fecha_publi_libro' => $request->fecha_publi_libro,
+                'anio_publi_libro' => $request->anio_publi_libro,
                 'estado_libro' => $request->estado_libro,
             ]);
 
@@ -80,6 +80,7 @@ class LibroController extends Controller
 
             return response()->json([
                 'data' => $libro,  
+                'año' => $request->anio_publi_libro
             ]);
 
         }catch (\Exception $e) {

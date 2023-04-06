@@ -20,12 +20,13 @@ return new class extends Migration
             $table->string('apellido_pate_usuario', 45)->nullable();
             $table->string('apellido_mate_usuario', 45)->nullable();
             $table->string('email', 45)->unique();
+            $table->integer('numero_tele_usuario')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
             $table->integer('numero_casa_usuario')->nullable();
             $table->string('calle_usuario', 45)->nullable();
-            $table->dateTime('fecha_naci_usuario')->nullable();
-            $table->string('estado_usuario', 10)->nullable();
+            $table->date('fecha_naci_usuario')->nullable();
+            $table->tinyInteger('estado_usuario')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
