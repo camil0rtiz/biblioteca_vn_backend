@@ -20,7 +20,8 @@ class AuthController extends Controller
                 'rut_usuario' =>   $request->rut_usuario, 
                 'nombre_usuario'=>  $request->nombre_usuario, 
                 'apellido_pate_usuario'=>  $request->apellido_pate_usuario, 
-                'apellido_mate_usuario'=>  $request->apellido_mate_usuario, 
+                'apellido_mate_usuario'=>  $request->apellido_mate_usuario,
+                'numero_tele_usuario' => $request->numero_tele_usuario,
                 'email' =>   $request->email, 
                 'password' => Hash::make($request->password),
                 'numero_casa_usuario' =>  $request->numero_casa_usuario,
@@ -56,21 +57,9 @@ class AuthController extends Controller
 
     public function listarUsuarios() {
         
-        $users = User::select('users.id','users.nombre_usuario', 'users.rut_usuario' ,'users.apellido_pate_usuario', 'users.apellido_mate_usuario', 'users.email', 'users.calle_usuario', 'users.numero_casa_usuario')
+        $users = User::select('users.id','users.nombre_usuario', 'users.rut_usuario' ,'users.apellido_pate_usuario', 'users.numero_tele_usuario' ,'users.apellido_mate_usuario', 'users.email', 'users.calle_usuario', 'users.numero_casa_usuario', 'users.fecha_naci_usuario','roles.id as id_rol', 'roles.tipo_rol')
                                 ->leftJoin('role_user', 'users.id', '=', 'role_user.id_usuario')
-                                ->leftJoin('roles', 'roles.id', '=', 'role_user.id_rol')->where('roles.tipo_rol', null)->orderBy('id', 'asc')->get() ; 
-
-        return response()->json([
-            'data' => $users
-        ]);
-
-    }
-
-    public function listarBibliotecarios() {
-        
-        $users = User::select('users.id','users.nombre_usuario', 'users.rut_usuario' ,'users.apellido_pate_usuario', 'users.apellido_mate_usuario', 'users.email', 'users.calle_usuario','users.numero_casa_usuario','roles.id as id_rol', 'roles.tipo_rol' )
-                                ->leftJoin('role_user', 'users.id', '=', 'role_user.id_usuario')
-                                ->leftJoin('roles', 'roles.id', '=', 'role_user.id_rol')->where('tipo_rol', '=', 'Admin')->orWhere('tipo_rol', '=', 'Voluntario')->orderBy('id', 'asc')->get() ; 
+                                ->leftJoin('roles', 'roles.id', '=', 'role_user.id_rol')->orderBy('id', 'asc')->get() ; 
 
         return response()->json([
             'data' => $users

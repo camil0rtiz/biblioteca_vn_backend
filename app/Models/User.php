@@ -21,6 +21,7 @@ class User extends Authenticatable
         'nombre_usuario',
         'apellido_pate_usuario',
         'apellido_mate_usuario',
+        'numero_tele_usuario',
         'email',
         'password',
         'numero_casa_usuario',
