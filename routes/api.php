@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\LibroController;
 use App\Http\Controllers\Api\AutorController;
 use App\Http\Controllers\Api\EditorialController;
 use App\Http\Controllers\Api\EjemplarController;
+use App\Http\Controllers\Api\PrestamoController;
 
 Route::post('usuarios/agregar', [AuthController::class, 'agregarUsuario']);
 Route::post('usuarios/login', [AuthController::class, 'login']);
@@ -18,6 +19,7 @@ Route::middleware(['auth:sanctum'])->prefix('usuarios')->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
     Route::get('listar', [AuthController::class, 'listarUsuarios']);
     Route::put('actualizar/{user}', [AuthController::class, 'actualizarUsuario']);
+    Route::put('habilitar/{user}', [AuthController::class, 'habilitarUsuario']);
     Route::delete('eliminar/{user}', [AuthController::class,'eliminarUsuario']);
 });
 
@@ -32,6 +34,7 @@ Route::middleware(['auth:sanctum'])->prefix('membresias')->group(function () {
 Route::prefix('libros')->group(function () {
     Route::post('agregar', [LibroController::class, 'agregarLibro']);
     Route::get('listar', [LibroController::class, 'listarLibros']);
+    Route::get('buscarId', [LibroController::class, 'buscarLibroPorId']);
     Route::put('actualizar/{libro}', [LibroController::class, 'actualizarLibro']);
 });
 
@@ -51,4 +54,8 @@ Route::middleware(['auth:sanctum'])->prefix('editoriales')->group(function () {
 Route::middleware(['auth:sanctum'])->prefix('ejemplares')->group(function () {
     Route::post('agregar', [EjemplarController::class, 'agregarEjemplar']);
     Route::get('listar', [EjemplarController::class, 'listarEjemplares']);
+});
+
+Route::middleware(['auth:sanctum'])->prefix('prestamos')->group(function () {
+    Route::post('reservar', [PrestamoController::class, 'reservarLibro']);
 });

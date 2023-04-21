@@ -9,7 +9,6 @@ use App\Models\Libro;
 class Autore extends Model
 {
     use HasFactory;
-    public $timestamps = false;
 
     protected $fillable = [
         'nombre_autor',

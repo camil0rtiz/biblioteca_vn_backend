@@ -11,6 +11,13 @@ class Prestamo extends Model
 {
     use HasFactory;
 
+    
+    protected $fillable = [
+        'id_vecino',
+        'id_ejemplar',
+        'estado_prestamo'
+    ];
+
      //Relación uno a muchos inversa con usuario
 
     // public function user(){

@@ -17,24 +17,40 @@ class AuthController extends Controller
 
         try {
             $user = User::create([
-                'rut_usuario' =>   $request->rut_usuario, 
-                'nombre_usuario'=>  $request->nombre_usuario, 
-                'apellido_pate_usuario'=>  $request->apellido_pate_usuario, 
-                'apellido_mate_usuario'=>  $request->apellido_mate_usuario,
+                'rut_usuario' => $request->rut_usuario, 
+                'nombre_usuario'=> $request->nombre_usuario, 
+                'apellido_pate_usuario'=> $request->apellido_pate_usuario, 
+                'apellido_mate_usuario'=> $request->apellido_mate_usuario,
                 'numero_tele_usuario' => $request->numero_tele_usuario,
-                'email' =>   $request->email, 
+                'email' => $request->email, 
                 'password' => Hash::make($request->password),
-                'numero_casa_usuario' =>  $request->numero_casa_usuario,
-                'calle_usuario' =>  $request->calle_usuario,             
-                'fecha_naci_usuario' =>  $request->fecha_naci_usuario,
+                'numero_casa_usuario' => $request->numero_casa_usuario,
+                'calle_usuario' => $request->calle_usuario,             
+                'fecha_naci_usuario' => $request->fecha_naci_usuario,
                 'estado_usuario' => $request->estado_usuario 
             ]);
 
-            if($request->id_membresia){
+            //funciona 
+            
+            // $fecha_pago = date('Y-m-d');
+
+            // if($request->id_membresia == 1){
+            //     $fecha_vencimiento = strtotime('+6 months', strtotime($fecha_pago));
+            //     $fecha_vencimiento = date('Y-m-d' , $fecha_vencimiento);
+            // }elseif($request->id_membresia == 2){
+            //     $fecha_vencimiento = strtotime('+12 months', strtotime($fecha_pago));
+            //     $fecha_vencimiento = date('Y-m-d' , $fecha_vencimiento);
+            // }
+
+            if(($request->id_membresia != null) && ($request->estado_usuario = 1)){
+
+
+                $fecha_pago = 'pase por aqui';
+
                 $user->membresias()->attach($request->id_membresia, [
-                    'fecha_pago_paga' => today(),
-                    'fecha_venci_paga' => today(),
-                    'fecha_acti_paga' => today(),
+                    'fecha_pago_paga' => $fecha_pago,
+                    'fecha_venci_paga' => $fecha_vencimiento,
+                    'fecha_acti_paga' => $fecha_pago,
                 ]);
             }
 
@@ -43,7 +59,8 @@ class AuthController extends Controller
             }
     
             return response()->json([
-                'data' => $user
+                'data' => $user,
+                'fecha_pago' =>  $request->id_membresia
             ]);
 
         } catch (\Exception $e) {
@@ -55,11 +72,13 @@ class AuthController extends Controller
 
     }
 
-    public function listarUsuarios() {
+    public function listarUsuarios(Request $request) {
+
+        $estado = $request->estado;
         
         $users = User::select('users.id','users.nombre_usuario', 'users.rut_usuario' ,'users.apellido_pate_usuario', 'users.numero_tele_usuario' ,'users.apellido_mate_usuario', 'users.email', 'users.calle_usuario', 'users.numero_casa_usuario', 'users.fecha_naci_usuario','roles.id as id_rol', 'roles.tipo_rol')
                                 ->leftJoin('role_user', 'users.id', '=', 'role_user.id_usuario')
-                                ->leftJoin('roles', 'roles.id', '=', 'role_user.id_rol')->orderBy('id', 'asc')->get() ; 
+                                ->leftJoin('roles', 'roles.id', '=', 'role_user.id_rol')->where('users.estado_usuario','=',"$estado")->orderBy('id', 'asc')->get() ; 
 
         return response()->json([
             'data' => $users
@@ -75,7 +94,29 @@ class AuthController extends Controller
 
             if($request->id_rol){
                 $user->roles()->sync($request->id_rol);
+            }else{
+                $user->roles()->detach();
             }
+
+            return response()->json([
+                'data' => $user,
+            ]);
+
+        } catch (\Exception $e) {
+
+            return response()->json([
+                "message" => 'Por favor hable con el Administrador'
+            ]);
+
+        }
+
+    }
+
+    public function habilitarUsuario(Request $request, User $user){
+
+        try {
+
+            $user->update(['estado_usuario' => $request->estado_usuario]);
 
             return response()->json([
                 'data' => $user
@@ -124,7 +165,7 @@ class AuthController extends Controller
             
             $token = $user->createToken('auth_token')->plainTextToken;
             
-            $user = User::select('users.nombre_usuario', 'users.apellido_pate_usuario', 'users.apellido_mate_usuario', 'roles.tipo_rol' )
+            $user = User::select('users.id','users.nombre_usuario', 'users.apellido_pate_usuario', 'users.apellido_mate_usuario', 'roles.tipo_rol' )
                 ->leftJoin('role_user', 'users.id', '=', 'role_user.id_usuario')
                 ->leftJoin('roles', 'roles.id', '=', 'role_user.id_rol')    
                 ->where('rut_usuario', $request['rut_usuario'])->get()->firstOrFail();
