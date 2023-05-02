@@ -11,6 +11,7 @@ use App\Models\Role;
 use App\Models\Membresia;
 use App\Models\Evento;
 use App\Models\Prestamo;
+use App\Models\Archivo;
 
 class User extends Authenticatable
 {
@@ -62,4 +63,11 @@ class User extends Authenticatable
     public function prestamos(){
         return $this->hasMany(Prestamo::class);
     }
+
+    //relacion polimorfica con archivo
+
+    public function archivo(){
+        return $this->morphOne(Archivo::class, 'imageable');
+    }
+    
 }

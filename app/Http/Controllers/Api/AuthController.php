@@ -13,7 +13,7 @@ use App\Http\Requests\actualizarUsuarioRequest;
 
 class AuthController extends Controller
 {   
-    public function agregarUsuario(agregarUsuarioRequest $request){
+    public function agregarUsuario(Request $request){
 
         try {
             $user = User::create([
@@ -31,6 +31,8 @@ class AuthController extends Controller
             ]);
 
             //funciona 
+
+            $p = 'no paso';
             
             // $fecha_pago = date('Y-m-d');
 
@@ -42,25 +44,35 @@ class AuthController extends Controller
             //     $fecha_vencimiento = date('Y-m-d' , $fecha_vencimiento);
             // }
 
-            if(($request->id_membresia != null) && ($request->estado_usuario = 1)){
+            // if(($request->id_membresia != null) && ($request->estado_usuario = 1)){
 
 
-                $fecha_pago = 'pase por aqui';
+            //     $fecha_pago = 'pase por aqui';
 
-                $user->membresias()->attach($request->id_membresia, [
-                    'fecha_pago_paga' => $fecha_pago,
-                    'fecha_venci_paga' => $fecha_vencimiento,
-                    'fecha_acti_paga' => $fecha_pago,
-                ]);
-            }
+            //     $user->membresias()->attach($request->id_membresia, [
+            //         'fecha_pago_paga' => $fecha_pago,
+            //         'fecha_venci_paga' => $fecha_vencimiento,
+            //         'fecha_acti_paga' => $fecha_pago,
+            //     ]);
+            // }
+
+            dd($request->all());
 
             if($request->id_rol){
                 $user->roles()->attach($request->id_rol);
             }
-    
+
+            if($request->hasFile('file1') && $request->hasFile('file2')){
+
+                $p = 'paso';
+
+            }
+
+            dd($request->all());
+
             return response()->json([
                 'data' => $user,
-                'fecha_pago' =>  $request->id_membresia
+                // 'data2' => dd($request->all())
             ]);
 
         } catch (\Exception $e) {

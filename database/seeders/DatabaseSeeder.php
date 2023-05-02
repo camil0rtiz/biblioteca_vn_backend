@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
         
         $this->call(RoleSeeder::class);
         $this->call(MembresiaSeeder::class);
+        $this->call(CategoriaSeeder::class);
 
         // Role::factory(100)->create();
         // Membresia::factory(100)->create();

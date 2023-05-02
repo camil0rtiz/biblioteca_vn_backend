@@ -10,6 +10,8 @@ use App\Http\Controllers\Api\LibroController;
 use App\Http\Controllers\Api\AutorController;
 use App\Http\Controllers\Api\EditorialController;
 use App\Http\Controllers\Api\EjemplarController;
+use App\Http\Controllers\Api\EventoController;
+use App\Http\Controllers\Api\CategoriaController;
 use App\Http\Controllers\Api\PrestamoController;
 
 Route::post('usuarios/agregar', [AuthController::class, 'agregarUsuario']);
@@ -54,6 +56,15 @@ Route::middleware(['auth:sanctum'])->prefix('editoriales')->group(function () {
 Route::middleware(['auth:sanctum'])->prefix('ejemplares')->group(function () {
     Route::post('agregar', [EjemplarController::class, 'agregarEjemplar']);
     Route::get('listar', [EjemplarController::class, 'listarEjemplares']);
+});
+
+Route::middleware(['auth:sanctum'])->prefix('eventos')->group(function () {
+    Route::post('agregar', [EventoController::class, 'agregarEvento']);
+    Route::get('listar', [EventoController::class, 'listarEventos']);
+});
+
+Route::middleware(['auth:sanctum'])->prefix('categorias')->group(function () {
+    Route::get('listar', [CategoriaController::class, 'listarCategorias']);
 });
 
 Route::middleware(['auth:sanctum'])->prefix('prestamos')->group(function () {
