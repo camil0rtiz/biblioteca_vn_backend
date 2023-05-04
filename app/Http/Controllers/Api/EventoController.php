@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Evento;
+use App\Models\Archivo;
 use Illuminate\Http\Request;
 
 class EventoController extends Controller
@@ -24,13 +25,33 @@ class EventoController extends Controller
     {
         try {
 
+            $data = $request->all(); 
+
             $evento = Evento::create([
-                'id_categoria' => $request->id_categoria,
-                'id_usuario' => $request->id_usuario,
-                'titulo_evento' => $request->titulo_evento,
-                'descripcion_evento' => $request->descripcion_evento,
-                'estado_evento' => $request->estado_evento
+                'id_categoria' => $data['id_categoria'],
+                'id_usuario' => $data['id_usuario'],
+                'titulo_evento' => $data['titulo_evento'],
+                'descripcion_evento' => $data['descripcion_evento'],
+                'estado_evento' => $data['estado_evento']
             ]);
+
+            if ($request->hasFile('imagenesEvento')) {
+
+                $archivos = [];
+    
+                foreach ($request->file('imagenesEvento') as $imagen) {
+
+                    $filename = $imagen->getClientOriginalName();
+
+                    $path = $imagen->storeAs('eventos', $filename, 'public');
+
+                    $archivos[] = new Archivo(['url' => $path]);
+
+                }
+    
+                $evento->archivos()->saveMany($archivos);
+
+            }
 
             return response()->json([
                 'data' => $evento

@@ -13,12 +13,15 @@ class Archivo extends Model
         'url',
     ];
 
-
     public function libro(){
         return $this->morphTo();
     }
 
     public function user(){
+        return $this->morphTo();
+    }
+
+    public function evento(){
         return $this->morphTo();
     }
 

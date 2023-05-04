@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Categoria;
+use App\Models\Archivo;
 
 class Evento extends Model
 {
@@ -30,5 +31,10 @@ class Evento extends Model
         $this->belongsTo(Categoria::class);
     }
 
+     //relacion polimorfica con archivo
+
+    public function archivos(){
+        return $this->morphMany(Archivo::class, 'imageable');
+    }
 
 }
