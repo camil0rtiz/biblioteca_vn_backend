@@ -66,8 +66,8 @@ class User extends Authenticatable
 
     //relacion polimorfica con archivo
 
-    public function archivo(){
-        return $this->morphOne(Archivo::class, 'imageable');
+    public function archivos(){
+        return $this->morphMany(Archivo::class, 'imageable');
     }
     
 }
