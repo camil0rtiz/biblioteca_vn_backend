@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('titulo_libro',100)->nullable();
             $table->string('isbn_libro', 100)->nullable();
-            $table->string('dewey_libro',45)->nullable();
+            $table->string('dewey_libro',60)->nullable();
             $table->text('resena_libro')->nullable();
             $table->integer('numero_pagi_libro')->nullable();
             $table->string('categoria_libro',45)->nullable();

@@ -21,6 +21,17 @@ class EventoController extends Controller
         ]);
     }
 
+    public function listarEventosHome()
+    {
+        $eventos = Evento::with('archivos')
+        ->where('estado_evento', '=', '1')
+        ->get();
+
+        return response()->json([
+            'data' => $eventos
+        ]);
+    }
+
     public function agregarEvento(Request $request)
     {
         try {

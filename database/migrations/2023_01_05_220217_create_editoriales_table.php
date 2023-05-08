@@ -16,7 +16,6 @@ return new class extends Migration
         Schema::create('editoriales', function (Blueprint $table) {
             $table->id();
             $table->string('nombre_editorial',45)->nullable();
-            $table->string('anio_edi_editorial',20)->nullable();
             $table->timestamps();
         });
     }

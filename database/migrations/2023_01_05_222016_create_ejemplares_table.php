@@ -20,7 +20,8 @@ return new class extends Migration
             $table->foreign('id_libro')->references('id')->on('libros')->onDelete('cascade');
             $table->foreign('id_editorial')->references('id')->on('editoriales')->onDelete('cascade');
             $table->integer('numero_regis_ejemplar')->unique();
-            $table->string('codigo_unic_ejemplar',60)->nullable();
+            $table->string('anio_edi_ejemplar',20)->nullable();
+            $table->string('dewey_unic_ejemplar',60)->nullable();
             $table->tinyInteger('estado_ejemplar')->nullable();
             $table->timestamps();
         });
