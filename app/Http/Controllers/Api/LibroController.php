@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Libro;
+use App\Models\Archivo;
 use Illuminate\Http\Request;
 use App\Http\Requests\agregarLibroRequest;
 use Illuminate\Support\Facades\Storage;
@@ -97,34 +98,36 @@ class LibroController extends Controller
     {
         try {
 
+            $data = $request->all(); 
+
             $libro = Libro::create([
-                'titulo_libro' => $request->titulo_libro,
-                'isbn_libro' => $request->isbn_libro,
-                'dewey_libro' => $request->dewey_libro,
-                'resena_libro' => $request->resena_libro,
-                'numero_pagi_libro' => $request->numero_pagi_libro,
-                'categoria_libro' => $request->categoria_libro,
-                'anio_publi_libro' => $request->anio_publi_libro,
-                'estado_libro' => $request->estado_libro,
+                'titulo_libro' => $data['titulo_libro'],
+                'isbn_libro' => $data['isbn_libro'],
+                'dewey_libro' => $data['dewey_libro'],
+                'numero_pagi_libro' => $data['numero_pagi_libro'],
+                'anio_publi_libro' => $data['anio_publi_libro'],
+                'resena_libro' => $data['resena_libro'],
+                'estado_libro' => $data['estado_libro'],
             ]);
 
-            $libro->autores()->attach($request->id_autor);
+            $libro->autores()->attach($data['id_autor']);
         
-            if($request->hasFile('file')){
+            if($request->hasFile('portada')){
 
-                $file = $request->file('file');
-                $filename = $file->getClientOriginalName();
-                $url = $request->file('file')->storeAs('image/',$filename,'public');
+                $portada = $request->file('portada');
+                $filename = $portada->getClientOriginalName();
+                $url = $portada->storeAs('portadas', $filename, 'public');
 
-                $libro->archivo()->create([
+                $file = new Archivo([
                     'url' => $url,
                 ]);
+                
+                $libro->archivo()->save($file);
         
             }
 
             return response()->json([
                 'data' => $libro,  
-                'año' => $request->anio_publi_libro
             ]);
 
         }catch (\Exception $e) {

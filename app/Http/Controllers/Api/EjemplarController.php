@@ -29,6 +29,9 @@ class EjemplarController extends Controller
             $ejemplar = Ejemplare::create([
                 'id_libro' => $request->id_libro,
                 'id_editorial' => $request->id_editorial,
+                'numero_regis_ejemplar' => $request->numero_regis_ejemplar,
+                'anio_edi_ejemplar' => $request->anio_edi_ejemplar,
+                'estado_ejemplar' => $request->estado_ejemplar,
             ]);
 
             return response()->json([
