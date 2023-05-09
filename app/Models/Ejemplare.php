@@ -14,7 +14,11 @@ class Ejemplare extends Model
 
     protected $fillable = [
         'id_libro',
-        'id_editorial'
+        'id_editorial',
+        'numero_regis_ejemplar',
+        'anio_edi_ejemplar',
+        'dewey_unic_ejemplar',
+        'estado_ejemplar' 
     ];
 
     //Relación uno a muchos inversa con libro
