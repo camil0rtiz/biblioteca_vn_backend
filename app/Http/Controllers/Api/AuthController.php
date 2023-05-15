@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
@@ -157,6 +158,25 @@ class AuthController extends Controller
 
         }
 
+    }
+
+    public function descargarComprobante($id){
+
+        try {
+
+            $rutaArchivo = User::findOrFail($id)->archivos()->where('imageable_type', User::class)->value('url');
+            
+            $urlArchivo = public_path('storage/'.$rutaArchivo);
+
+            return response()->download($urlArchivo);
+            
+        }
+        catch(\Exception $e){
+
+            return response()->json(['error' => 'Error al obtener el archivo.'], 500);
+
+        }
+    
     }
 
     public function eliminarUsuario(User $user){

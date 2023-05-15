@@ -21,8 +21,9 @@ Route::middleware(['auth:sanctum'])->prefix('usuarios')->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
     Route::get('listar', [AuthController::class, 'listarUsuarios']);
     Route::put('actualizar/{user}', [AuthController::class, 'actualizarUsuario']);
-    Route::put('habilitar/{user}', [AuthController::class, 'habilitarUsuario']);
     Route::delete('eliminar/{user}', [AuthController::class,'eliminarUsuario']);
+    Route::put('habilitar/{user}', [AuthController::class, 'habilitarUsuario']);
+    Route::get('comprobante/{user}', [AuthController::class, 'descargarComprobante']);
 });
 
 Route::middleware(['auth:sanctum'])->prefix('roles')->group(function () {
