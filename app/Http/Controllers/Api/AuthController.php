@@ -93,7 +93,7 @@ class AuthController extends Controller
 
             return response()->json([
                 'data' => $user,
-                'data2' => $a 
+                'data2' => $request->all()
             ]);
 
         } catch (\Exception $e) {
