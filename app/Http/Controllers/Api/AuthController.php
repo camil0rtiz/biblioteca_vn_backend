@@ -37,14 +37,6 @@ class AuthController extends Controller
 
             $fecha_pago = date('Y-m-d');
 
-            $a = 'chao';
-
-            if($request->hasFile('comprobante1')) {
-                // Procesa los archivos
-                $a= 'hola';
-            }
-
-
             if($data['estado_usuario'] == 1){
 
                 if($data['id_membresia'] == 1){
@@ -98,7 +90,6 @@ class AuthController extends Controller
 
             return response()->json([
                 'data' => $user,
-                'data2' => $request->file('comprobante1')
             ]);
 
         } catch (\Exception $e) {
