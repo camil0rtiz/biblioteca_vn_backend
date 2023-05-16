@@ -73,9 +73,13 @@ class AuthController extends Controller
                 $user->roles()->attach($data['id_rol']);
             }
 
+            if($request->hasFile('comprobante1')) {
+                // Procesa los archivos
+                $a= 'hola';
+            }
+
             if($request->hasFile('comprobante1') && $request->hasFile('comprobante2')){
 
-                $a= 'hola';
 
                 $imagen1 = $request->file('comprobante1');
                 $filename1 = $imagen1->getClientOriginalName();
@@ -93,7 +97,7 @@ class AuthController extends Controller
 
             return response()->json([
                 'data' => $user,
-                'data2' => $request->all()
+                'data2' => $a
             ]);
 
         } catch (\Exception $e) {
