@@ -37,6 +37,8 @@ class AuthController extends Controller
 
             $fecha_pago = date('Y-m-d');
 
+            $a = 'chao';
+
             if($data['estado_usuario'] == 1){
 
                 if($data['id_membresia'] == 1){
@@ -73,6 +75,8 @@ class AuthController extends Controller
 
             if($request->hasFile('comprobante1') && $request->hasFile('comprobante2')){
 
+                $a= 'hola';
+
                 $imagen1 = $request->file('comprobante1');
                 $filename1 = $imagen1->getClientOriginalName();
                 $path1 = $imagen1->storeAs('comprobantes', $filename1, 'public');
@@ -88,7 +92,8 @@ class AuthController extends Controller
             }
 
             return response()->json([
-                'data' => $user
+                'data' => $user,
+                'data2' => $a 
             ]);
 
         } catch (\Exception $e) {
