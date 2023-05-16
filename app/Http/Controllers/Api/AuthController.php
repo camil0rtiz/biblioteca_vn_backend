@@ -98,7 +98,7 @@ class AuthController extends Controller
 
             return response()->json([
                 'data' => $user,
-                'data2' => $a
+                'data2' => $request->file('comprobante1')
             ]);
 
         } catch (\Exception $e) {
