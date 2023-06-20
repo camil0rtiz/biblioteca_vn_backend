@@ -144,12 +144,15 @@ class AuthController extends Controller
 
     }
 
-    public function listarUsuariosHabilitados() {
+    public function listarUsuariosHabilitados(Request $request) {
+
+        $text = $request->nombre;
 
         $users = User::select('users.id','users.nombre_usuario', 'users.rut_usuario' ,'users.apellido_pate_usuario', 'users.numero_tele_usuario' ,'users.apellido_mate_usuario', 'users.email', 'users.calle_usuario', 'users.numero_casa_usuario', 'users.fecha_naci_usuario', 'users.estado_usuario','roles.id as id_rol', 'roles.tipo_rol')
                                 ->leftJoin('role_user', 'users.id', '=', 'role_user.id_usuario')
                                 ->leftJoin('roles', 'roles.id', '=', 'role_user.id_rol')
                                 ->where('users.estado_usuario','=','1')
+                                ->where('users.nombre_usuario','like',"%$text%")
                                 ->orderBy('id', 'asc')->get() ; 
 
         return response()->json([

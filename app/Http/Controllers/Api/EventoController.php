@@ -10,11 +10,15 @@ use Illuminate\Http\Request;
 class EventoController extends Controller
 {
 
-    public function listarEventos()
+    public function listarEventos(Request $request)
     {
+
+        $text = $request->nombre;
+
         $eventos = Evento::select('eventos.id', 'eventos.titulo_evento', 'eventos.descripcion_evento', 'categorias.id as id_categoria', 'categorias.tipo_categoria')
         ->join('categorias', 'eventos.id_categoria', '=', 'categorias.id')
         ->where('estado_evento','=','1')
+        ->where('titulo_evento','like',"%$text%")
         ->get();
         
         return response()->json([

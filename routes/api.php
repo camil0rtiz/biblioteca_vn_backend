@@ -46,6 +46,7 @@ Route::prefix('libros')->group(function () {
 Route::middleware(['auth:sanctum'])->prefix('autores')->group(function () {
     Route::post('agregar', [AutorController::class, 'agregarAutor']);
     Route::get('listar', [AutorController::class, 'listarAutores']);
+    Route::get('buscar', [AutorController::class, 'buscarAutor']);
     Route::put('actualizar/{autore}', [AutorController::class, 'actualizarAutor']);
     Route::put('eliminar/{autore}', [AutorController::class, 'eliminarAutor']);
 });

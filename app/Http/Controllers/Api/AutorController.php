@@ -20,6 +20,19 @@ class AutorController extends Controller
         ]);
     }
 
+    public function buscarAutor(Request $request)
+    {
+
+        $text = $request->nombre;
+
+        $autores = Autore::select('id','nombre_autor')->where('nombre_autor','like',"%$text%")->get();
+
+        return response()->json([
+            'data' => $autores,
+        ]);
+
+    }
+
     public function agregarAutor(agregarAutorRequest $request)
     {
         try {
