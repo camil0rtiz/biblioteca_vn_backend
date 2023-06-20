@@ -14,6 +14,7 @@ class EventoController extends Controller
     {
         $eventos = Evento::select('eventos.id', 'eventos.titulo_evento', 'eventos.descripcion_evento', 'categorias.id as id_categoria', 'categorias.tipo_categoria')
         ->join('categorias', 'eventos.id_categoria', '=', 'categorias.id')
+        ->where('estado_evento','=','1')
         ->get();
         
         return response()->json([
@@ -77,4 +78,45 @@ class EventoController extends Controller
         
         }
     }
+
+    public function actualizarEvento(Request $request, Evento $evento)
+    {
+        try {
+
+            $evento->update($request->all());
+
+            return response()->json([
+                'data' => $evento
+            ]);
+
+        } catch (\Exception $e) {
+
+            return response()->json([
+                "error" => $e,
+                "message" => 'Por favor hable con el Administrador'
+            ]);
+        
+        }
+    }
+
+    public function eliminarEvento(Request $request, Evento $evento)
+    {
+        try {
+
+            $evento->update($request->all());
+
+            return response()->json([
+                'data' => $evento
+            ]);
+
+        } catch (\Exception $e) {
+
+            return response()->json([
+                "error" => $e,
+                "message" => 'Por favor hable con el Administrador'
+            ]);
+        
+        }
+    }
+
 }

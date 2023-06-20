@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('autores', function (Blueprint $table) {
             $table->id();
             $table->string('nombre_autor',45)->nullable();
+            $table->tinyInteger('estado_autor')->nullable();
             $table->timestamps();
         });
     }

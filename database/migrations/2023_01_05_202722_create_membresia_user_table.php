@@ -19,9 +19,9 @@ return new class extends Migration
             $table->unsignedBigInteger('id_usuario')->nullable();
             $table->foreign('id_membresia')->references('id')->on('membresias')->onDelete('cascade');
             $table->foreign('id_usuario')->references('id')->on('users')->onDelete('cascade');
-            $table->dateTime('fecha_pago_paga')->nullable();
-            $table->dateTime('fecha_venci_paga')->nullable();
-            $table->dateTime('fecha_acti_paga')->nullable();
+            $table->dateTime('fecha_pago_membresia')->nullable();
+            $table->dateTime('fecha_venci_membresia')->nullable();
+            $table->dateTime('fecha_acti_membresia')->nullable();
 
             $table->timestamps();
         });

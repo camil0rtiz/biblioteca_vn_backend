@@ -39,6 +39,7 @@ class EditorialController extends Controller
 
             $editorial = Editoriale::create([
                 'nombre_editorial' => $request->nombre_editorial,
+                'estado_editorial' => $request->estado_editorial
             ]);
 
             return response()->json([
@@ -73,8 +74,23 @@ class EditorialController extends Controller
         }
     }
 
-    public function destroy(Editoriale $editoriale)
+    public function eliminarEditorial(Request $request, Editoriale $editoriale)
     {
-        //
+        try {
+
+            $editorial->update($request->all());
+
+            return response()->json([
+                'data' => $editorial
+            ]);
+
+        } catch (\Exception $e) {
+
+            return response()->json([
+                "error" => $e,
+                "message" => 'Por favor hable con el Administrador'
+            ]);
+        
+        }
     }
 }

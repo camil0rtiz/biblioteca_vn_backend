@@ -96,17 +96,17 @@ class AuthController extends Controller
                 }
 
                 $user->membresias()->attach($data['id_membresia'], [
-                    'fecha_pago_paga' => $fecha_pago,
-                    'fecha_venci_paga' => $fecha_vencimiento,
-                    'fecha_acti_paga' => $fecha_pago,
+                    'fecha_pago_membresia' => $fecha_pago,
+                    'fecha_venci_membresia' => $fecha_vencimiento,
+                    'fecha_acti_membresia' => $fecha_pago,
                 ]);
 
             }elseif($data['estado_usuario'] == 2){
 
                 $user->membresias()->attach($data['id_membresia'], [
-                    'fecha_pago_paga' => $fecha_pago,
-                    'fecha_venci_paga' => $fecha_pago,
-                    'fecha_acti_paga' => $fecha_pago,
+                    'fecha_pago_membresia' => $fecha_pago,
+                    'fecha_venci_membresia' => $fecha_pago,
+                    'fecha_acti_membresia' => $fecha_pago,
                 ]);
 
             }

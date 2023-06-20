@@ -26,6 +26,7 @@ class AutorController extends Controller
 
             $autor = Autore::create([
                 'nombre_autor' => $request->nombre_autor,
+                'estado_autor' => $request->estado_autor
             ]);
 
             return response()->json([
@@ -60,8 +61,22 @@ class AutorController extends Controller
         }
     }
 
-    public function destroy(Autore $autore)
+    public function eliminarAutor(Request $request, Autore $autore)
     {
-        //
+        try {
+
+            $autore->update($request->all());
+
+            return response()->json([
+                'data' => $autore
+            ]);
+
+        } catch (\Exception $e) {
+
+            return response()->json([
+                "message" => 'Por favor hable con el Administrador'
+            ]);
+
+        }
     }
 }

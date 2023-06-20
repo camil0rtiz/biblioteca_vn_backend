@@ -19,6 +19,7 @@ class agregarAutorRequest extends FormRequest
     {
         return [
             'nombre_autor' => 'required|string',
+            'estado_autor' => 'required',
         ];
     }
 

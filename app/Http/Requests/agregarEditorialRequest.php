@@ -20,6 +20,7 @@ class agregarEditorialRequest extends FormRequest
         return [
 
             'nombre_editorial' => 'required|string',
+            'estado_editorial' => 'required',
 
         ];
     }

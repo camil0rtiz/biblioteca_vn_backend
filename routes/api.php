@@ -46,6 +46,7 @@ Route::middleware(['auth:sanctum'])->prefix('autores')->group(function () {
     Route::post('agregar', [AutorController::class, 'agregarAutor']);
     Route::get('listar', [AutorController::class, 'listarAutores']);
     Route::put('actualizar/{autore}', [AutorController::class, 'actualizarAutor']);
+    Route::put('eliminar/{autore}', [AutorController::class, 'eliminarAutor']);
 });
 
 Route::middleware(['auth:sanctum'])->prefix('editoriales')->group(function () {
@@ -53,6 +54,7 @@ Route::middleware(['auth:sanctum'])->prefix('editoriales')->group(function () {
     Route::get('listar', [EditorialController::class, 'listarEditoriales']);
     Route::get('buscar', [EditorialController::class, 'buscarEditorial']);
     Route::put('actualizar/{editoriale}', [EditorialController::class, 'actualizarEditorial']);
+    Route::put('eliminar/{editoriale}', [EditorialController::class, 'eliminarEditorial']);
 });
 
 Route::middleware(['auth:sanctum'])->prefix('ejemplares')->group(function () {
@@ -65,6 +67,8 @@ Route::get('eventos/listarEventosHome', [EventoController::class, 'listarEventos
 Route::middleware(['auth:sanctum'])->prefix('eventos')->group(function () {
     Route::post('agregar', [EventoController::class, 'agregarEvento']);
     Route::get('listar', [EventoController::class, 'listarEventos']);
+    Route::put('actualizar/{evento}', [EventoController::class, 'actualizarEvento']);
+    Route::put('eliminar/{evento}', [EventoController::class, 'eliminarEvento']);
 });
 
 Route::middleware(['auth:sanctum'])->prefix('categorias')->group(function () {

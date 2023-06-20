@@ -12,6 +12,7 @@ class Autore extends Model
 
     protected $fillable = [
         'nombre_autor',
+        'estado_autor',
     ];
 
     //Relacion muchos a muchos con libros

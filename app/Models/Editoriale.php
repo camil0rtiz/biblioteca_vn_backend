@@ -12,6 +12,7 @@ class Editoriale extends Model
 
     protected $fillable = [
         'nombre_editorial',
+        'estado_editorial',
     ];
 
     //Relacion uno a muchos 

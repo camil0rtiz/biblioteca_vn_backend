@@ -11,9 +11,11 @@ use Illuminate\Support\Facades\Storage;
 
 class LibroController extends Controller
 {
-    
-    public function listarLibros()
+    public function listarLibros(Request $request)
     {
+
+        $cantidad = intval($request->per_page);
+
         $libros = Libro::select('libros.id','libros.titulo_libro','libros.dewey_libro','libros.isbn_libro','libros.resena_libro','libros.numero_pagi_libro','libros.categoria_libro','libros.anio_publi_libro', 'archivos.url')
         ->leftJoin('autor_libro', 'libros.id', '=', 'autor_libro.id_libro')
         ->leftJoin('autores', 'autores.id', '=', 'autor_libro.id_autor')
@@ -23,7 +25,7 @@ class LibroController extends Controller
         ->selectRaw('GROUP_CONCAT(autor_libro.id_autor) as idAutor')
         ->selectRaw('GROUP_CONCAT(autores.nombre_autor) as nombreAutor')
         ->groupBy('libros.id','libros.titulo_libro','libros.dewey_libro','libros.isbn_libro','libros.resena_libro','libros.numero_pagi_libro','libros.categoria_libro','libros.anio_publi_libro', 'archivos.url')
-        ->paginate(10);
+        ->paginate($cantidad);
 
         $nuevoConjunto = [];
 
