@@ -15,15 +15,20 @@ class LibroController extends Controller
     {
 
         $cantidad = intval($request->per_page);
+        $text = $request->nombre;
 
         $libros = Libro::select('libros.id','libros.titulo_libro','libros.dewey_libro','libros.isbn_libro','libros.resena_libro','libros.numero_pagi_libro','libros.categoria_libro','libros.anio_publi_libro', 'archivos.url')
         ->leftJoin('autor_libro', 'libros.id', '=', 'autor_libro.id_libro')
         ->leftJoin('autores', 'autores.id', '=', 'autor_libro.id_autor')
-        ->leftJoin('archivos', 'libros.id', '=', 'archivos.imageable_id')
+        ->leftJoin('archivos', function ($join) {
+            $join->on('libros.id', '=', 'archivos.imageable_id')
+                ->where('archivos.imageable_type', '=', 'App\Models\Libro');
+        })
         ->withCount('ejemplares as cant_ejemplares')
         ->selectRaw('COUNT(libros.id) as cant_libros')
         ->selectRaw('GROUP_CONCAT(autor_libro.id_autor) as idAutor')
         ->selectRaw('GROUP_CONCAT(autores.nombre_autor) as nombreAutor')
+        ->where('libros.titulo_libro','like',"%$text%")
         ->groupBy('libros.id','libros.titulo_libro','libros.dewey_libro','libros.isbn_libro','libros.resena_libro','libros.numero_pagi_libro','libros.categoria_libro','libros.anio_publi_libro', 'archivos.url')
         ->paginate($cantidad);
 
@@ -50,7 +55,7 @@ class LibroController extends Controller
 
         return response()->json([
             'data' => $nuevoConjunto,
-            'data2' => $libros
+            'data2' => $libros,
         ]);
     }
 
