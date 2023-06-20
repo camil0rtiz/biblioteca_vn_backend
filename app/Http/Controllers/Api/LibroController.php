@@ -163,8 +163,22 @@ class LibroController extends Controller
         }
     }
 
-    public function eliminarLibro(Libro $libro)
+    public function eliminarLibro(Request $request, Libro $libro)
     {
-        //
+        try {
+
+            $libro->update($request->all());
+            
+            return response()->json([
+                'data' => $libro
+            ]);
+
+        } catch (\Exception $e) {
+
+            return response()->json([
+                "message" => 'Por favor hable con el Administrador'
+            ]);
+
+        }
     }
 }

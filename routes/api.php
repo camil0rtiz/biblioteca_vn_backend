@@ -40,6 +40,7 @@ Route::prefix('libros')->group(function () {
     Route::get('listar', [LibroController::class, 'listarLibros']);
     Route::get('buscarId', [LibroController::class, 'buscarLibroPorId']);
     Route::put('actualizar/{libro}', [LibroController::class, 'actualizarLibro']);
+    Route::put('eliminar/{libro}', [LibroController::class, 'actualizarLibro']);
 });
 
 Route::middleware(['auth:sanctum'])->prefix('autores')->group(function () {

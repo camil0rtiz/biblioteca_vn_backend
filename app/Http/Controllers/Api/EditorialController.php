@@ -78,10 +78,10 @@ class EditorialController extends Controller
     {
         try {
 
-            $editorial->update($request->all());
+            $editoriale->update($request->all());
 
             return response()->json([
-                'data' => $editorial
+                'data' => $editoriale
             ]);
 
         } catch (\Exception $e) {
