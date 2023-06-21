@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\EjemplarController;
 use App\Http\Controllers\Api\EventoController;
 use App\Http\Controllers\Api\CategoriaController;
 use App\Http\Controllers\Api\PrestamoController;
+use App\Http\Controllers\Api\ReservaController;
 
 Route::post('usuarios/agregar', [AuthController::class, 'agregarUsuario']);
 Route::post('usuarios/login', [AuthController::class, 'login']);
@@ -79,4 +80,8 @@ Route::middleware(['auth:sanctum'])->prefix('categorias')->group(function () {
 
 Route::middleware(['auth:sanctum'])->prefix('prestamos')->group(function () {
     Route::post('reservar', [PrestamoController::class, 'reservarLibro']);
+});
+
+Route::middleware(['auth:sanctum'])->prefix('reservas')->group(function () {
+    Route::post('reservar', [ReservaController::class, 'reservarLibro']);
 });
