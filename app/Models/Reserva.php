@@ -12,6 +12,7 @@ class Reserva extends Model
     protected $fillable = [
         'id_usuario',
         'id_libro',
+        'fecha_reserva',
         'estado_reserva'
     ];
 }

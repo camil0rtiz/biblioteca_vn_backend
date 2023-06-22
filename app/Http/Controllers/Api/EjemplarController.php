@@ -32,12 +32,20 @@ class EjemplarController extends Controller
     {
         try {
 
+            $consulta = Ejemplare::selectRaw('COUNT(*) as total_ejemplares')
+                ->join('libros', 'ejemplares.id_libro', '=', 'libros.id')
+                ->where('libros.id', $request->id_libro)
+                ->where('ejemplares.anio_edi_ejemplar', $request->anio_edi_ejemplar)
+                ->get();
+
+            $totalEjemplares = $consulta[0]->total_ejemplares + 1;
+
             $ejemplar = Ejemplare::create([
                 'id_libro' => $request->id_libro,
                 'id_editorial' => $request->id_editorial,
                 'numero_regis_ejemplar' => $request->numero_regis_ejemplar,
                 'anio_edi_ejemplar' => $request->anio_edi_ejemplar,
-                'dewey_unic_ejemplar' => $request->dewey_unic_ejemplar,
+                'dewey_unic_ejemplar' => $request->dewey_unic_ejemplar . ' C' . $totalEjemplares,
                 'estado_ejemplar' => $request->estado_ejemplar,
             ]);
 

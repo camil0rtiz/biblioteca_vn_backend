@@ -18,13 +18,14 @@ class ReservaController extends Controller
                 $reserva = Reserva::create([
                     'id_usuario' => $request->id_usuario,
                     'id_libro'=> $libro,
+                    'fecha_reserva' => date('Y-m-d'),
                     'estado_reserva' => $request->estado_reserva,
                 ]);
 
             }
 
             return response()->json([
-                'data' => $reserva  
+                'data' => $reserva,
             ]);
 
         }catch (Exception $e) {
@@ -35,6 +36,22 @@ class ReservaController extends Controller
             ]);
         
         }
+    }
+
+    public function listarReservas()
+    {
+        
+        $reservas = Reserva::select('reservas.id', 'reservas.fecha_reserva', 'reservas.estado_reserva','users.rut_usuario' ,'users.nombre_usuario', 'users.apellido_pate_usuario','libros.titulo_libro')
+        ->join('users', 'reservas.id_usuario', '=', 'users.id')
+        ->join('libros', 'reservas.id_libro', '=', 'libros.id')
+        ->groupBy('reservas.id', 'reservas.fecha_reserva', 'reservas.estado_reserva' ,'users.rut_usuario', 'users.nombre_usuario',  'users.apellido_pate_usuario', 'libros.titulo_libro')
+        ->orderBy('reservas.id', 'asc')
+        ->get();
+
+        return response()->json([
+            'data' => $reservas  
+        ]);
+
     }
 
 }
