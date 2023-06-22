@@ -38,18 +38,33 @@ class ReservaController extends Controller
         }
     }
 
-    public function listarReservas()
+    public function listarReservas(Request $request)
     {
-        
+
+        $text = $request->nombre;
+
         $reservas = Reserva::select('reservas.id', 'reservas.fecha_reserva', 'reservas.estado_reserva','users.rut_usuario' ,'users.nombre_usuario', 'users.apellido_pate_usuario','libros.titulo_libro')
         ->join('users', 'reservas.id_usuario', '=', 'users.id')
         ->join('libros', 'reservas.id_libro', '=', 'libros.id')
+        ->where('reservas.estado_reserva', '1')
+        ->where('users.nombre_usuario','like',"%$text%")
         ->groupBy('reservas.id', 'reservas.fecha_reserva', 'reservas.estado_reserva' ,'users.rut_usuario', 'users.nombre_usuario',  'users.apellido_pate_usuario', 'libros.titulo_libro')
         ->orderBy('reservas.id', 'asc')
         ->get();
 
         return response()->json([
             'data' => $reservas  
+        ]);
+
+    }
+
+    public function eliminarReserva(Request $request, Reserva $reserva)
+    {
+        
+        $reserva->update($request->all());
+
+        return response()->json([
+            'data' => $reserva  
         ]);
 
     }

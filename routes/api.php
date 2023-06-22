@@ -85,4 +85,5 @@ Route::middleware(['auth:sanctum'])->prefix('prestamos')->group(function () {
 Route::middleware(['auth:sanctum'])->prefix('reservas')->group(function () {
     Route::post('reservar', [ReservaController::class, 'reservarLibro']);
     Route::get('listar', [ReservaController::class, 'listarReservas']);
+    Route::put('eliminar/{reserva}', [ReservaController::class, 'eliminarReserva']);
 });
