@@ -20,8 +20,8 @@ return new class extends Migration
             $table->string('dewey_libro',60)->nullable();
             $table->text('resena_libro')->nullable();
             $table->integer('numero_pagi_libro')->nullable();
-            $table->string('categoria_libro',45)->nullable();
             $table->string('anio_publi_libro',20)->nullable();
+            $table->integer('stock_libro')->nullable()->default(0);
             $table->tinyInteger('estado_libro')->nullable();
             $table->timestamps();
         });

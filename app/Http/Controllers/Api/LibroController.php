@@ -17,7 +17,7 @@ class LibroController extends Controller
         $cantidad = intval($request->per_page);
         $text = $request->nombre;
 
-        $libros = Libro::select('libros.id','libros.titulo_libro','libros.dewey_libro','libros.isbn_libro','libros.resena_libro','libros.numero_pagi_libro','libros.categoria_libro','libros.anio_publi_libro', 'archivos.url')
+        $libros = Libro::select('libros.id','libros.titulo_libro','libros.dewey_libro','libros.isbn_libro','libros.resena_libro','libros.numero_pagi_libro','libros.anio_publi_libro', 'archivos.url')
         ->leftJoin('autor_libro', 'libros.id', '=', 'autor_libro.id_libro')
         ->leftJoin('autores', 'autores.id', '=', 'autor_libro.id_autor')
         ->leftJoin('archivos', function ($join) {
@@ -29,7 +29,7 @@ class LibroController extends Controller
         ->selectRaw('GROUP_CONCAT(autor_libro.id_autor) as idAutor')
         ->selectRaw('GROUP_CONCAT(autores.nombre_autor) as nombreAutor')
         ->where('libros.titulo_libro','like',"%$text%")
-        ->groupBy('libros.id','libros.titulo_libro','libros.dewey_libro','libros.isbn_libro','libros.resena_libro','libros.numero_pagi_libro','libros.categoria_libro','libros.anio_publi_libro', 'archivos.url')
+        ->groupBy('libros.id','libros.titulo_libro','libros.dewey_libro','libros.isbn_libro','libros.resena_libro','libros.numero_pagi_libro','libros.anio_publi_libro', 'archivos.url')
         ->paginate($cantidad);
 
         $nuevoConjunto = [];
@@ -42,7 +42,6 @@ class LibroController extends Controller
                 "isbn_libro" => $libro->isbn_libro,
                 "resena_libro" => $libro->resena_libro,
                 "numero_pagi_libro" => $libro->numero_pagi_libro,
-                "categoria_libro" => $libro->categoria_libro,
                 "anio_publi_libro" => $libro->anio_publi_libro,
                 "url" =>  $libro->url,
                 "autor" => [
