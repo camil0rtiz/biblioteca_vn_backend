@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Reserva;
+use App\Models\Libro;
 use Illuminate\Http\Request;
 
 class ReservaController extends Controller
@@ -21,6 +22,10 @@ class ReservaController extends Controller
                     'fecha_reserva' => date('Y-m-d'),
                     'estado_reserva' => $request->estado_reserva,
                 ]);
+
+                $libro = Libro::find($libro);
+                $libro->stock_libro -= 1;
+                $libro->save();
 
             }
 
