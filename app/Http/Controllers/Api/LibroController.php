@@ -17,19 +17,17 @@ class LibroController extends Controller
         $cantidad = intval($request->per_page);
         $text = $request->nombre;
 
-        $libros = Libro::select('libros.id','libros.titulo_libro','libros.dewey_libro','libros.isbn_libro','libros.resena_libro','libros.numero_pagi_libro','libros.anio_publi_libro', 'archivos.url')
+        $libros = Libro::select('libros.id','libros.titulo_libro','libros.dewey_libro','libros.isbn_libro','libros.resena_libro','libros.numero_pagi_libro','libros.anio_publi_libro', 'libros.stock_libro','archivos.url')
         ->leftJoin('autor_libro', 'libros.id', '=', 'autor_libro.id_libro')
         ->leftJoin('autores', 'autores.id', '=', 'autor_libro.id_autor')
         ->leftJoin('archivos', function ($join) {
             $join->on('libros.id', '=', 'archivos.imageable_id')
                 ->where('archivos.imageable_type', '=', 'App\Models\Libro');
         })
-        ->withCount('ejemplares as cant_ejemplares')
-        ->selectRaw('COUNT(libros.id) as cant_libros')
         ->selectRaw('GROUP_CONCAT(autor_libro.id_autor) as idAutor')
         ->selectRaw('GROUP_CONCAT(autores.nombre_autor) as nombreAutor')
         ->where('libros.titulo_libro','like',"%$text%")
-        ->groupBy('libros.id','libros.titulo_libro','libros.dewey_libro','libros.isbn_libro','libros.resena_libro','libros.numero_pagi_libro','libros.anio_publi_libro', 'archivos.url')
+        ->groupBy('libros.id','libros.titulo_libro','libros.dewey_libro','libros.isbn_libro','libros.resena_libro','libros.numero_pagi_libro','libros.anio_publi_libro','libros.stock_libro','archivos.url')
         ->paginate($cantidad);
 
         $nuevoConjunto = [];
@@ -43,12 +41,12 @@ class LibroController extends Controller
                 "resena_libro" => $libro->resena_libro,
                 "numero_pagi_libro" => $libro->numero_pagi_libro,
                 "anio_publi_libro" => $libro->anio_publi_libro,
+                "stock_libro" => $libro->stock_libro,
                 "url" =>  $libro->url,
                 "autor" => [
                     "value" => explode(",", $libro->idAutor), 
                     "label" => explode(",", $libro->nombreAutor)
                 ],
-                "cantidad_ejemplares" => $libro->cant_ejemplares 
             ];
         }
 
@@ -63,15 +61,14 @@ class LibroController extends Controller
 
         $id = $request->id_libro;
 
-        $libros = Libro::select('libros.id','libros.titulo_libro','libros.dewey_libro','libros.isbn_libro','libros.resena_libro','libros.numero_pagi_libro','libros.anio_publi_libro', 'archivos.url')
+        $libros = Libro::select('libros.id','libros.titulo_libro','libros.dewey_libro','libros.isbn_libro','libros.resena_libro','libros.numero_pagi_libro','libros.anio_publi_libro','libros.stock_libro','archivos.url')
         ->leftJoin('autor_libro', 'libros.id', '=', 'autor_libro.id_libro')
         ->leftJoin('autores', 'autores.id', '=', 'autor_libro.id_autor')
         ->leftJoin('archivos', 'libros.id', '=', 'archivos.imageable_id')
-        ->withCount('ejemplares as cant_ejemplares')
         ->selectRaw('GROUP_CONCAT(autor_libro.id_autor) as idAutor')
         ->selectRaw('GROUP_CONCAT(autores.nombre_autor) as nombreAutor')
         ->where('libros.id','=',"$id")
-        ->groupBy('libros.id','libros.titulo_libro','libros.dewey_libro','libros.isbn_libro','libros.resena_libro','libros.numero_pagi_libro','libros.anio_publi_libro', 'archivos.url')
+        ->groupBy('libros.id','libros.titulo_libro','libros.dewey_libro','libros.isbn_libro','libros.resena_libro','libros.numero_pagi_libro','libros.anio_publi_libro','libros.stock_libro','archivos.url')
         ->get();
 
         $nuevoConjunto = [];
@@ -85,12 +82,12 @@ class LibroController extends Controller
                 "resena_libro" => $libro->resena_libro,
                 "numero_pagi_libro" => $libro->numero_pagi_libro,
                 "anio_publi_libro" => $libro->anio_publi_libro,
+                "stock_libro" => $libro->stock_libro,
                 "url" =>  $libro->url,
                 "autor" => [
                     "value" => explode(",", $libro->idAutor), 
                     "label" => explode(",", $libro->nombreAutor)
                 ],
-                "cantidad_ejemplares" => $libro->cant_ejemplares 
             ];
         }
 
