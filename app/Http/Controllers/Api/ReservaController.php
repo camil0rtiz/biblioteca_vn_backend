@@ -68,6 +68,12 @@ class ReservaController extends Controller
         
         $reserva->update($request->all());
 
+        $libroId = $reserva->id_libro;
+
+        $libro = Libro::find($libroId);
+        $libro->stock_libro += 1;
+        $libro->save();
+
         return response()->json([
             'data' => $reserva  
         ]);
