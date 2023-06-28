@@ -9,23 +9,23 @@ use Illuminate\Http\Request;
 class PrestamoController extends Controller
 {
 
-    public function reservarLibro(Request $request)
+    public function prestarLibro(Request $request)
     {
         
         try {
 
-            foreach($request->id_ejemplar as $libro){
+            foreach($request->id_ejemplar as $ejemplar){
                 
                 $prestamo = Prestamo::create([
                     'id_vecino' => $request->id_vecino,
-                    'id_ejemplar'=> $libro,
-                    // 'estado_prestamo' => $request->estado_prestamo,
+                    'id_ejemplar'=> $ejemplar,
+                    'estado_prestamo' => $request->estado_prestamo,
                 ]);
 
             }
 
             return response()->json([
-                'data' => $prestamo  
+                'data' => $prestamo
             ]);
 
         }catch (Exception $e) {
@@ -36,16 +36,6 @@ class PrestamoController extends Controller
             ]);
         
         }
-    }
-
-    public function edit(Prestamo $prestamo)
-    {
-        
-    }
-
-    public function update(Request $request, Prestamo $prestamo)
-    {
-        //
     }
 
 }

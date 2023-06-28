@@ -79,7 +79,7 @@ Route::middleware(['auth:sanctum'])->prefix('categorias')->group(function () {
 });
 
 Route::middleware(['auth:sanctum'])->prefix('prestamos')->group(function () {
-    Route::post('prestar', [PrestamoController::class, 'reservarLibro']);
+    Route::post('prestar', [PrestamoController::class, 'prestarLibro']);
 });
 
 Route::middleware(['auth:sanctum'])->prefix('reservas')->group(function () {
