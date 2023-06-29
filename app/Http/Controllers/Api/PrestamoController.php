@@ -38,4 +38,32 @@ class PrestamoController extends Controller
         }
     }
 
+    public function listarPrestamos()
+    {
+    
+        try {
+
+            $prestamos = Prestamo::select('prestamos.id','prestamos.id_vecino', 'prestamos.id_ejemplar','users.rut_usuario', 'users.nombre_usuario', 'libros.titulo_libro', 'ejemplares.dewey_unic_ejemplar', 'prestamos.fecha_prestamo', 'prestamos.fecha_entrega_prestamo', 'prestamos.estado_prestamo')
+            ->join('users', 'prestamos.id_vecino', '=', 'users.id')
+            ->join('ejemplares', 'prestamos.id_ejemplar', '=', 'ejemplares.id')
+            ->join('libros', 'libros.id', '=', 'ejemplares.id_libro')
+            ->where('prestamos.estado_prestamo', '1')
+            ->groupBy('prestamos.id','prestamos.id_vecino', 'prestamos.id_ejemplar','users.rut_usuario', 'users.nombre_usuario', 'libros.titulo_libro', 'ejemplares.dewey_unic_ejemplar', 'prestamos.fecha_prestamo', 'prestamos.fecha_entrega_prestamo', 'prestamos.estado_prestamo')
+            ->orderBy('prestamos.id', 'asc')
+            ->get();
+    
+            return response()->json([
+                'data' => $prestamos  
+            ]);
+
+        }catch (Exception $e) {
+
+            return response()->json([
+                "message" => 'Por favor hable con el Administrador',
+                'error' => $e
+            ]);
+        
+        }
+    }
+
 }
