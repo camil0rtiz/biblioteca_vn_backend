@@ -11,10 +11,12 @@ class Prestamo extends Model
 {
     use HasFactory;
 
-    
     protected $fillable = [
         'id_vecino',
+        'id_bibliotecario',
         'id_ejemplar',
+        'fecha_prestamo',
+        'fecha_entre_prestamo',
         'estado_prestamo'
     ];
 

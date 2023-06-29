@@ -59,6 +59,7 @@ class EjemplarController extends Controller
         ->join('editoriales', 'ejemplares.id_editorial', '=', 'editoriales.id')
         ->join('libros', 'ejemplares.id_libro', '=', 'libros.id')
         ->where('ejemplares.id_libro', '=', "$id")
+        ->where('ejemplares.estado_ejemplar', '=', '1')
         ->groupBy('ejemplares.id','libros.titulo_libro','ejemplares.numero_regis_ejemplar','ejemplares.dewey_unic_ejemplar','ejemplares.anio_edi_ejemplar')
         ->get();
 
