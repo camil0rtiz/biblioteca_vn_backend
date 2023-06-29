@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Prestamo;
 use App\Models\Ejemplare;
+use App\Models\Libro;
 use Illuminate\Http\Request;
 
 class PrestamoController extends Controller
@@ -53,17 +54,49 @@ class PrestamoController extends Controller
     
         try {
 
-            $prestamos = Prestamo::select('prestamos.id','prestamos.id_vecino', 'prestamos.id_ejemplar','users.rut_usuario', 'users.nombre_usuario', 'libros.titulo_libro', 'ejemplares.dewey_unic_ejemplar', 'prestamos.fecha_prestamo', 'prestamos.fecha_entre_prestamo', 'prestamos.estado_prestamo')
+            $prestamos = Prestamo::select('prestamos.id','prestamos.id_vecino', 'prestamos.id_ejemplar','users.rut_usuario', 'users.nombre_usuario', 'libros.id AS id_libro', 'libros.titulo_libro', 'ejemplares.dewey_unic_ejemplar', 'prestamos.fecha_prestamo', 'prestamos.fecha_entre_prestamo', 'prestamos.estado_prestamo')
             ->join('users', 'prestamos.id_vecino', '=', 'users.id')
             ->join('ejemplares', 'prestamos.id_ejemplar', '=', 'ejemplares.id')
             ->join('libros', 'libros.id', '=', 'ejemplares.id_libro')
             ->where('prestamos.estado_prestamo', '1')
-            ->groupBy('prestamos.id','prestamos.id_vecino', 'prestamos.id_ejemplar','users.rut_usuario', 'users.nombre_usuario', 'libros.titulo_libro', 'ejemplares.dewey_unic_ejemplar', 'prestamos.fecha_prestamo', 'prestamos.fecha_entre_prestamo', 'prestamos.estado_prestamo')
+            ->groupBy('prestamos.id','prestamos.id_vecino', 'prestamos.id_ejemplar','users.rut_usuario', 'users.nombre_usuario', 'libros.id', 'libros.titulo_libro', 'ejemplares.dewey_unic_ejemplar', 'prestamos.fecha_prestamo', 'prestamos.fecha_entre_prestamo', 'prestamos.estado_prestamo')
             ->orderBy('prestamos.id', 'asc')
             ->get();
     
             return response()->json([
                 'data' => $prestamos  
+            ]);
+
+        }catch (Exception $e) {
+
+            return response()->json([
+                "message" => 'Por favor hable con el Administrador',
+                'error' => $e
+            ]);
+        
+        }
+    }
+
+    public function devolverPrestamos(Request $request, $id)
+    {
+    
+        try {
+
+            $prestamo = Prestamo::findOrFail($id);
+            $prestamo->estado_prestamo = 2;
+            $prestamo->fecha_rece_prestamo = date('Y-m-d');
+            $prestamo->save();
+
+            $ejemplar = Ejemplare::findOrFail($request->id_ejemplar);
+            $ejemplar->estado_ejemplar = 1;
+            $ejemplar->save();
+
+            $libro = Libro::find($request->id_libro);
+            $libro->stock_libro += 1;
+            $libro->save();
+
+            return response()->json([
+                'data' => $prestamo
             ]);
 
         }catch (Exception $e) {
