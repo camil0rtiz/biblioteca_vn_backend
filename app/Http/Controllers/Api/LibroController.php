@@ -24,7 +24,10 @@ class LibroController extends Controller
             $join->on('libros.id', '=', 'archivos.imageable_id')
                 ->where('archivos.imageable_type', '=', 'App\Models\Libro');
         })
-        ->with('ejemplares') 
+        ->with(['ejemplares' => function($query) {
+            $query->select('ejemplares.*', 'libros.titulo_libro')
+                ->join('libros', 'ejemplares.id_libro', '=', 'libros.id');
+        }])
         ->selectRaw('GROUP_CONCAT(autor_libro.id_autor) as idAutor')
         ->selectRaw('GROUP_CONCAT(autores.nombre_autor) as nombreAutor')
         ->where('libros.titulo_libro','like',"%$text%")
