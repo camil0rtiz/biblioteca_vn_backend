@@ -252,6 +252,19 @@ class AuthController extends Controller
 
     }
 
+    public function verificarExistenciaUsuario($registroRut)
+    {
+        $usuario = User::where('rut_usuario', $registroRut)->first();
+
+        if ($usuario) {
+            // El usuario está registrado en la base de datos
+            return response()->json(['data' => true]);
+        } else {
+            // El usuario no está registrado en la base de datos
+            return response()->json(['data' => false]);
+        }
+    }
+
     public function descargarComprobante($id){
 
         try {

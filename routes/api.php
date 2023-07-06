@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\PrestamoController;
 use App\Http\Controllers\Api\ReservaController;
 
 Route::post('usuarios/agregar', [AuthController::class, 'agregarUsuario']);
+Route::get('usuarios/verificar/{registroRut}', [AuthController::class, 'verificarExistenciaUsuario']);
 Route::post('usuarios/login', [AuthController::class, 'login']);
 
 Route::middleware(['auth:sanctum'])->prefix('usuarios')->group(function () {
@@ -88,5 +89,4 @@ Route::middleware(['auth:sanctum'])->prefix('prestamos')->group(function () {
     Route::post('prestar', [PrestamoController::class, 'prestarLibro']);
     Route::get('listar', [PrestamoController::class, 'listarPrestamos']);
     Route::put('devolver/{prestamo}', [PrestamoController::class, 'devolverPrestamos']);
-    
 });
