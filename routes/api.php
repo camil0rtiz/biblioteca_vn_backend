@@ -40,9 +40,11 @@ Route::middleware(['auth:sanctum'])->prefix('membresias')->group(function () {
 Route::prefix('libros')->group(function () {
     Route::post('agregar', [LibroController::class, 'agregarLibro']);
     Route::get('listar', [LibroController::class, 'listarLibros']);
+    Route::get('listarMasReservados', [LibroController::class, 'listarMasReservados']);
+    Route::get('listarNuevosAgregados', [LibroController::class, 'listarUltimosAgregados']);
     Route::get('buscarId', [LibroController::class, 'buscarLibroPorId']);
     Route::put('actualizar/{libro}', [LibroController::class, 'actualizarLibro']);
-    Route::put('eliminar/{libro}', [LibroController::class, 'actualizarLibro']);
+    Route::put('eliminar/{libro}', [LibroController::class, 'eliminarLibro']);
 });
 
 Route::middleware(['auth:sanctum'])->prefix('autores')->group(function () {

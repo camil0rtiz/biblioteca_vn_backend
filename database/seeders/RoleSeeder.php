@@ -18,7 +18,7 @@ class RoleSeeder extends Seeder
 
         $role = new Role();
 
-        $role->tipo_rol = 'SuperAdmin';
+        $role->tipo_rol = 'Administrador';
 
         $role->save();
 

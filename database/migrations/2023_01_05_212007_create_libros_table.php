@@ -16,12 +16,10 @@ return new class extends Migration
         Schema::create('libros', function (Blueprint $table) {
             $table->id();
             $table->string('titulo_libro',100)->nullable();
-            $table->string('isbn_libro', 100)->nullable();
             $table->string('dewey_libro',60)->nullable();
-            $table->text('resena_libro')->nullable();
-            $table->integer('numero_pagi_libro')->nullable();
             $table->string('anio_publi_libro',20)->nullable();
             $table->integer('stock_libro')->nullable()->default(0);
+            $table->text('resena_libro')->nullable();
             $table->tinyInteger('estado_libro')->nullable();
             $table->timestamps();
         });

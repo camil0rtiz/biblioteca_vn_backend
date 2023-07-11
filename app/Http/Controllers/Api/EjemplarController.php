@@ -26,8 +26,9 @@ class EjemplarController extends Controller
             $ejemplar = Ejemplare::create([
                 'id_libro' => $request->id_libro,
                 'id_editorial' => $request->id_editorial,
-                'numero_regis_ejemplar' => $request->numero_regis_ejemplar,
                 'anio_edi_ejemplar' => $request->anio_edi_ejemplar,
+                'isbn_ejemplar' => $request->isbn_ejemplar,
+                'numero_pagi_ejemplar' => $request->numero_pagi_ejemplar,
                 'dewey_unic_ejemplar' => $request->dewey_unic_ejemplar . ' C' . $totalEjemplares,
                 'estado_ejemplar' => $request->estado_ejemplar,
             ]);

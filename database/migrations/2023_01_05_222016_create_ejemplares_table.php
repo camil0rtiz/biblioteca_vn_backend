@@ -19,9 +19,10 @@ return new class extends Migration
             $table->unsignedBigInteger('id_editorial')->nullable();
             $table->foreign('id_libro')->references('id')->on('libros')->onDelete('cascade');
             $table->foreign('id_editorial')->references('id')->on('editoriales')->onDelete('cascade');
-            $table->integer('numero_regis_ejemplar')->unique()->default(0);
-            $table->string('anio_edi_ejemplar',20)->nullable();
             $table->string('dewey_unic_ejemplar',60)->nullable();
+            $table->string('isbn_ejemplar', 100)->nullable();
+            $table->string('anio_edi_ejemplar',20)->nullable();
+            $table->integer('numero_pagi_ejemplar')->nullable();
             $table->tinyInteger('estado_ejemplar')->nullable();
             $table->timestamps();
         });

@@ -17,7 +17,7 @@ class LibroController extends Controller
         $cantidad = intval($request->per_page);
         $text = $request->nombre;
 
-        $libros = Libro::select('libros.id','libros.titulo_libro','libros.dewey_libro','libros.isbn_libro','libros.resena_libro','libros.numero_pagi_libro','libros.anio_publi_libro', 'libros.stock_libro','archivos.url')
+        $libros = Libro::select('libros.id','libros.titulo_libro','libros.dewey_libro','libros.resena_libro','libros.anio_publi_libro', 'libros.stock_libro','archivos.url')
         ->leftJoin('autor_libro', 'libros.id', '=', 'autor_libro.id_libro')
         ->leftJoin('autores', 'autores.id', '=', 'autor_libro.id_autor')
         ->leftJoin('archivos', function ($join) {
@@ -31,7 +31,7 @@ class LibroController extends Controller
         ->selectRaw('GROUP_CONCAT(autor_libro.id_autor) as idAutor')
         ->selectRaw('GROUP_CONCAT(autores.nombre_autor) as nombreAutor')
         ->where('libros.titulo_libro','like',"%$text%")
-        ->groupBy('libros.id','libros.titulo_libro','libros.dewey_libro','libros.isbn_libro','libros.resena_libro','libros.numero_pagi_libro','libros.anio_publi_libro','libros.stock_libro','archivos.url')
+        ->groupBy('libros.id','libros.titulo_libro','libros.dewey_libro','libros.resena_libro','libros.anio_publi_libro','libros.stock_libro','archivos.url')
         ->paginate($cantidad);
 
         $nuevoConjunto = [];
@@ -41,9 +41,7 @@ class LibroController extends Controller
                 "id" => $libro->id,
                 "titulo_libro" => $libro->titulo_libro,
                 "dewey_libro" => $libro->dewey_libro,
-                "isbn_libro" => $libro->isbn_libro,
                 "resena_libro" => $libro->resena_libro,
-                "numero_pagi_libro" => $libro->numero_pagi_libro,
                 "anio_publi_libro" => $libro->anio_publi_libro,
                 "stock_libro" => $libro->stock_libro,
                 "ejemplares" => $libro->ejemplares,
@@ -61,19 +59,38 @@ class LibroController extends Controller
         ]);
     }
 
+    public function listarMasReservados(Request $request)
+    {
+
+        return response()->json([
+            'data' => $request,
+        ]);
+    }
+
+    public function listarUltimosAgregados(Request $request)
+    {
+
+        
+
+        return response()->json([
+            'data' => $request,
+        ]);
+    }
+
+
     public function buscarLibroPorId(Request $request)
     {
 
         $id = $request->id_libro;
 
-        $libros = Libro::select('libros.id','libros.titulo_libro','libros.dewey_libro','libros.isbn_libro','libros.resena_libro','libros.numero_pagi_libro','libros.anio_publi_libro','libros.stock_libro','archivos.url')
+        $libros = Libro::select('libros.id','libros.titulo_libro','libros.dewey_libro','libros.resena_libro','libros.anio_publi_libro','libros.stock_libro','archivos.url')
         ->leftJoin('autor_libro', 'libros.id', '=', 'autor_libro.id_libro')
         ->leftJoin('autores', 'autores.id', '=', 'autor_libro.id_autor')
         ->leftJoin('archivos', 'libros.id', '=', 'archivos.imageable_id')
         ->selectRaw('GROUP_CONCAT(autor_libro.id_autor) as idAutor')
         ->selectRaw('GROUP_CONCAT(autores.nombre_autor) as nombreAutor')
         ->where('libros.id','=',"$id")
-        ->groupBy('libros.id','libros.titulo_libro','libros.dewey_libro','libros.isbn_libro','libros.resena_libro','libros.numero_pagi_libro','libros.anio_publi_libro','libros.stock_libro','archivos.url')
+        ->groupBy('libros.id','libros.titulo_libro','libros.dewey_libro','libros.resena_libro','libros.anio_publi_libro','libros.stock_libro','archivos.url')
         ->get();
 
         $nuevoConjunto = [];
@@ -83,9 +100,7 @@ class LibroController extends Controller
                 "id" => $libro->id,
                 "titulo_libro" => $libro->titulo_libro,
                 "dewey_libro" => $libro->dewey_libro,
-                "isbn_libro" => $libro->isbn_libro,
                 "resena_libro" => $libro->resena_libro,
-                "numero_pagi_libro" => $libro->numero_pagi_libro,
                 "anio_publi_libro" => $libro->anio_publi_libro,
                 "stock_libro" => $libro->stock_libro,
                 "url" =>  $libro->url,
@@ -109,9 +124,7 @@ class LibroController extends Controller
 
             $libro = Libro::create([
                 'titulo_libro' => $data['titulo_libro'],
-                'isbn_libro' => $data['isbn_libro'],
                 'dewey_libro' => $data['dewey_libro'],
-                'numero_pagi_libro' => $data['numero_pagi_libro'],
                 'anio_publi_libro' => $data['anio_publi_libro'],
                 'resena_libro' => $data['resena_libro'],
                 'estado_libro' => $data['estado_libro'],
