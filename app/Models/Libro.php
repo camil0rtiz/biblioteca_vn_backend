@@ -14,10 +14,8 @@ class Libro extends Model
 
     protected $fillable = [
         'titulo_libro',
-        'isbn_libro',
         'dewey_libro',
         'resena_libro',
-        'numero_pagi_libro',
         'categoria_libro',
         'anio_publi_libro',
         'estado_libro',

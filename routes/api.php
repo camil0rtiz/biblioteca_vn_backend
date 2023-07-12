@@ -66,6 +66,7 @@ Route::middleware(['auth:sanctum'])->prefix('editoriales')->group(function () {
 Route::middleware(['auth:sanctum'])->prefix('ejemplares')->group(function () {
     Route::post('agregar', [EjemplarController::class, 'agregarEjemplar']);
     Route::get('listar', [EjemplarController::class, 'listarEjemplares']);
+    Route::put('eliminar/{ejemplare}', [EjemplarController::class, 'eliminarEjemplar']);
 });
 
 Route::get('eventos/listarEventosHome', [EventoController::class, 'listarEventosHome']);

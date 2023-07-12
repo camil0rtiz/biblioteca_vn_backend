@@ -27,6 +27,16 @@ class PrestamoController extends Controller
                     'estado_prestamo' => $request->estado_prestamo,
                 ]);
 
+                if($request->descontar_stock == 1){
+
+
+                    $ejem = Ejemplare::find($ejemplar);
+                    $libro = Libro::find($ejem->id_libro);
+                    $libro->stock_libro -= 1;
+                    $libro->save();
+
+                }
+
                 $ejemplar = Ejemplare::find($ejemplar);
     
                 $ejemplar->estado_ejemplar = 2;

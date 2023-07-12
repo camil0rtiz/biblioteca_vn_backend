@@ -70,4 +70,15 @@ class EjemplarController extends Controller
 
     }
 
+    public function eliminarEjemplar(Request $request, Ejemplare $ejemplare)
+    {
+
+        $ejemplare->update($request->all());
+
+        return response()->json([
+            'data' => $ejemplare
+        ]);
+
+    }
+
 }

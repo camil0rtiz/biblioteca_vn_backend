@@ -26,7 +26,8 @@ class LibroController extends Controller
         })
         ->with(['ejemplares' => function($query) {
             $query->select('ejemplares.*', 'libros.titulo_libro')
-                ->join('libros', 'ejemplares.id_libro', '=', 'libros.id');
+                ->join('libros', 'ejemplares.id_libro', '=', 'libros.id')
+                ->whereIn('ejemplares.estado_ejemplar', [1, 2]);
         }])
         ->selectRaw('GROUP_CONCAT(autor_libro.id_autor) as idAutor')
         ->selectRaw('GROUP_CONCAT(autores.nombre_autor) as nombreAutor')

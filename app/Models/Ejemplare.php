@@ -15,8 +15,9 @@ class Ejemplare extends Model
     protected $fillable = [
         'id_libro',
         'id_editorial',
-        'numero_regis_ejemplar',
         'anio_edi_ejemplar',
+        'isbn_ejemplar',
+        'numero_pagi_ejemplar',
         'dewey_unic_ejemplar',
         'estado_ejemplar' 
     ];
