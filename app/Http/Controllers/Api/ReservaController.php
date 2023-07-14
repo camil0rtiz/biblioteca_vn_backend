@@ -47,22 +47,24 @@ class ReservaController extends Controller
     public function listarReservas(Request $request)
     {
 
-        $text = $request->nombre;
+        $text = $request->rut;
 
         $reservas = Reserva::select('reservas.id', 'reservas.id_libro' , 'reservas.id_usuario', 'reservas.fecha_reserva', 'reservas.estado_reserva','users.rut_usuario' ,'users.nombre_usuario', 'users.apellido_pate_usuario','libros.titulo_libro')
         ->join('users', 'reservas.id_usuario', '=', 'users.id')
         ->join('libros', 'reservas.id_libro', '=', 'libros.id')
         ->join('ejemplares', 'libros.id', '=', 'ejemplares.id_libro')
         ->where('reservas.estado_reserva', '1')
-        ->where('users.nombre_usuario','like',"%$text%")
+        ->where('users.rut_usuario', '=', $text)
         ->groupBy('reservas.id', 'reservas.id_libro' , 'reservas.id_usuario', 'reservas.fecha_reserva', 'reservas.estado_reserva' ,'users.rut_usuario', 'users.nombre_usuario',  'users.apellido_pate_usuario', 'libros.titulo_libro')
         ->orderBy('reservas.id', 'asc')
         ->get();
 
         foreach ($reservas as $reserva) {
-            $reserva->ejemplares = Ejemplare::where('id_libro', $reserva->id_libro)->get();
+            $reserva->ejemplares = Ejemplare::where('id_libro', $reserva->id_libro)
+            ->where('estado_ejemplar', 1)
+            ->get();
         }
-    
+
         return response()->json([
             'data' => $reservas
         ]);
