@@ -152,7 +152,7 @@ class AuthController extends Controller
         $users = User::select('users.id','users.nombre_usuario', 'users.rut_usuario' ,'users.apellido_pate_usuario', 'users.numero_tele_usuario' ,'users.apellido_mate_usuario', 'users.email', 'users.calle_usuario', 'users.numero_casa_usuario', 'users.fecha_naci_usuario', 'users.estado_usuario','roles.id as id_rol', 'roles.tipo_rol')
                                 ->leftJoin('role_user', 'users.id', '=', 'role_user.id_usuario')
                                 ->leftJoin('roles', 'roles.id', '=', 'role_user.id_rol')
-                                ->where('users.estado_usuario','=','1')
+                                ->whereIn('users.estado_usuario',[1, 3, 4])
                                 ->where('users.nombre_usuario','like',"%$text%")
                                 ->orderBy('id', 'asc')->get() ; 
 
@@ -215,15 +215,16 @@ class AuthController extends Controller
 
     }
 
-    public function eliminarUsuario(User $user){
+    public function eliminarUsuario(Request $request, User $user){
         
         try {
-            $ifexist = User::where('id', $user->id)->first();
-            if ($ifexist != null){
-                $usuarios = User::find($user->id)->delete();
-                return response()->json(["data" => $usuarios], 200);
-            }
-            return response()->json(["msg" => "El id del usuario que intenta eliminar no existe"], 401);
+            
+            $user->update(['estado_usuario' => $request->estado_usuario]);
+
+            return response()->json([
+                'data' => $user
+            ]);
+            
         }
         catch (\Exception $e)
         {
@@ -233,6 +234,26 @@ class AuthController extends Controller
     }
 
     public function habilitarUsuario(Request $request, User $user){
+
+        try {
+
+            $user->update(['estado_usuario' => $request->estado_usuario]);
+
+            return response()->json([
+                'data' => $user
+            ]);
+
+        } catch (\Exception $e) {
+
+            return response()->json([
+                "message" => 'Por favor hable con el Administrador'
+            ]);
+
+        }
+
+    }
+
+    public function rechazarComprobante(Request $request, User $user){
 
         try {
 
@@ -282,5 +303,22 @@ class AuthController extends Controller
         }
     
     }
+
+     // public function eliminarUsuario(User $user){
+        
+    //     try {
+    //         $ifexist = User::where('id', $user->id)->first();
+    //         if ($ifexist != null){
+    //             $usuarios = User::find($user->id)->delete();
+    //             return response()->json(["data" => $usuarios], 200);
+    //         }
+    //         return response()->json(["msg" => "El id del usuario que intenta eliminar no existe"], 401);
+    //     }
+    //     catch (\Exception $e)
+    //     {
+    //         return response()->json(["error" => $e]);
+    //     }
+
+    // }
 
 }

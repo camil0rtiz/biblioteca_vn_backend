@@ -24,8 +24,9 @@ Route::middleware(['auth:sanctum'])->prefix('usuarios')->group(function () {
     Route::get('listarHabilitados', [AuthController::class, 'listarUsuariosHabilitados']);
     Route::get('listarPendientes', [AuthController::class, 'listarUsuariosPendientes']);
     Route::put('actualizar/{user}', [AuthController::class, 'actualizarUsuario']);
-    Route::delete('eliminar/{user}', [AuthController::class,'eliminarUsuario']);
+    Route::put('eliminar/{user}', [AuthController::class,'eliminarUsuario']);
     Route::put('habilitar/{user}', [AuthController::class, 'habilitarUsuario']);
+    Route::put('rechazar/{user}', [AuthController::class, 'rechazarComprobante']);
     Route::get('comprobante/{user}', [AuthController::class, 'descargarComprobante']);
 });
 
@@ -41,7 +42,7 @@ Route::prefix('libros')->group(function () {
     Route::post('agregar', [LibroController::class, 'agregarLibro']);
     Route::get('listar', [LibroController::class, 'listarLibros']);
     Route::get('listarMasReservados', [LibroController::class, 'listarMasReservados']);
-    Route::get('listarNuevosAgregados', [LibroController::class, 'listarUltimosAgregados']);
+    Route::get('listarUltimosAgregados', [LibroController::class, 'listarUltimosAgregados']);
     Route::get('buscarId', [LibroController::class, 'buscarLibroPorId']);
     Route::put('actualizar/{libro}', [LibroController::class, 'actualizarLibro']);
     Route::put('eliminar/{libro}', [LibroController::class, 'eliminarLibro']);

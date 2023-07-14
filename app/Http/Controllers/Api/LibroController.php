@@ -68,13 +68,43 @@ class LibroController extends Controller
         ]);
     }
 
-    public function listarUltimosAgregados(Request $request)
+    public function listarUltimosAgregados()
     {
 
-        
+        $libros = Libro::select('libros.id','libros.titulo_libro','libros.dewey_libro','libros.resena_libro','libros.anio_publi_libro', 'libros.stock_libro','archivos.url')
+        ->leftJoin('autor_libro', 'libros.id', '=', 'autor_libro.id_libro')
+        ->leftJoin('autores', 'autores.id', '=', 'autor_libro.id_autor')
+        ->leftJoin('archivos', function ($join) {
+            $join->on('libros.id', '=', 'archivos.imageable_id')
+                ->where('archivos.imageable_type', '=', 'App\Models\Libro');
+        })
+        ->selectRaw('GROUP_CONCAT(autor_libro.id_autor) as idAutor')
+        ->selectRaw('GROUP_CONCAT(autores.nombre_autor) as nombreAutor')
+        ->groupBy('libros.id','libros.titulo_libro','libros.dewey_libro','libros.resena_libro','libros.anio_publi_libro','libros.stock_libro','archivos.url')
+        ->take(10)
+        ->get();
+
+        $nuevoConjunto = [];
+
+        foreach($libros as $clave => $libro) {
+            $nuevoConjunto[$clave] = [
+                "id" => $libro->id,
+                "titulo_libro" => $libro->titulo_libro,
+                "dewey_libro" => $libro->dewey_libro,
+                "resena_libro" => $libro->resena_libro,
+                "anio_publi_libro" => $libro->anio_publi_libro,
+                "stock_libro" => $libro->stock_libro,
+                "ejemplares" => $libro->ejemplares,
+                "url" =>  $libro->url,
+                "autor" => [
+                    "value" => explode(",", $libro->idAutor), 
+                    "label" => explode(",", $libro->nombreAutor)
+                ],
+            ];
+        }
 
         return response()->json([
-            'data' => $request,
+            'data' => $nuevoConjunto,
         ]);
     }
 
