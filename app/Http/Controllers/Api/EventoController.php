@@ -16,6 +16,7 @@ class EventoController extends Controller
         $text = $request->nombre;
 
         $eventos = Evento::select('eventos.id', 'eventos.titulo_evento', 'eventos.descripcion_evento', 'categorias.id as id_categoria', 'categorias.tipo_categoria')
+        ->with('archivos:imageable_id,url')
         ->join('categorias', 'eventos.id_categoria', '=', 'categorias.id')
         ->where('estado_evento','=','1')
         ->where('titulo_evento','like',"%$text%")
