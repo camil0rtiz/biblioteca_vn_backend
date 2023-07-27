@@ -187,7 +187,17 @@ class LibroController extends Controller
     {
         try {
 
-            $data = $request->all(); 
+            $data = $request->all();
+            
+            $libroExistente = Libro::where('dewey_libro', $data['dewey_libro'])->first();
+
+            if($libroExistente) {
+
+                return response()->json([
+                    "message" => 'El código dewey libro ya se encuentra registrado',
+                ], 400); // Respuesta de error con código 400 (Bad Request)
+
+            }
 
             $libro = Libro::create([
                 'titulo_libro' => $data['titulo_libro'],
