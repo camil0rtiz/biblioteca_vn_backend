@@ -273,6 +273,48 @@ class AuthController extends Controller
 
     }
 
+    public function renovarComprobante(Request $request, User $user){
+
+        try {
+
+            $user->update(['estado_usuario' => $request->estado_usuario]);
+
+            $fecha_pago = date('Y-m-d');
+
+            $fecha_vencimiento = null;
+
+            if($request->id_membresia == 1){
+
+                $fecha_vencimiento = strtotime('+12 months', strtotime($fecha_pago));
+                $fecha_vencimiento = date('Y-m-d' , $fecha_vencimiento);
+
+            }elseif($request->id_membresia == 2){
+
+                $fecha_vencimiento = strtotime('+6 months', strtotime($fecha_pago));
+                $fecha_vencimiento = date('Y-m-d' , $fecha_vencimiento);
+
+            }
+
+            $user->membresias()->sync([$request->id_membresia => [
+                'fecha_pago_membresia' => $fecha_pago,
+                'fecha_venci_membresia' => $fecha_vencimiento,
+                'fecha_acti_membresia' => $fecha_pago,
+            ]]);
+
+            return response()->json([
+                'data' => $user
+            ]);
+
+        } catch (\Exception $e) {
+
+            return response()->json([
+                "message" => 'Por favor hable con el Administrador'
+            ]);
+
+        }
+
+    }
+
     public function verificarExistenciaUsuario($registroRut)
     {
         $usuario = User::where('rut_usuario', $registroRut)->first();
