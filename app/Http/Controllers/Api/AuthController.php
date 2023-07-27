@@ -64,7 +64,17 @@ class AuthController extends Controller
 
         try {
     
-            $data = $request->all(); 
+            $data = $request->all();
+            
+            $usuarioExistente = User::where('rut_usuario', $data['rut_usuario'])->first();
+
+            if ($usuarioExistente) {
+
+                return response()->json([
+                    "message" => 'El rut usuario ya se encuentra registrado',
+                ], 400); // Respuesta de error con código 400 (Bad Request)
+                
+            }
 
             $user = User::create([
                 'rut_usuario' => $data['rut_usuario'],
