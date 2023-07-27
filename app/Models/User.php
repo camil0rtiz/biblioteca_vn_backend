@@ -11,6 +11,7 @@ use App\Models\Role;
 use App\Models\Membresia;
 use App\Models\Evento;
 use App\Models\Prestamo;
+use App\Models\Reserva;
 use App\Models\Archivo;
 
 class User extends Authenticatable
@@ -62,6 +63,12 @@ class User extends Authenticatable
 
     public function prestamos(){
         return $this->hasMany(Prestamo::class);
+    }
+
+    //Relacion uno a muchos con reservas
+
+    public function reservas(){
+        return $this->hasMany(Reserva::class);
     }
 
     //relacion polimorfica con archivo

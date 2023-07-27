@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Autore;
 use App\Models\Ejemplare;
+use App\Models\Reserva;
 use App\Models\Archivo;
 
 class Libro extends Model
@@ -31,6 +32,12 @@ class Libro extends Model
 
     public function ejemplares(){
         return $this->hasMany(Ejemplare::class,'id_libro');
+    }
+
+     //relacion uno a muchos con ejemplares
+
+    public function reservas(){
+        return $this->hasMany(Reserva::class);
     }
 
     //relacion polimorfica con archivo

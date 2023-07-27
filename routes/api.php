@@ -46,6 +46,7 @@ Route::prefix('libros')->group(function () {
     Route::get('listarUltimosAgregados', [LibroController::class, 'listarUltimosAgregados']);
     Route::get('buscarId', [LibroController::class, 'buscarLibroPorId']);
     Route::put('actualizar/{libro}', [LibroController::class, 'actualizarLibro']);
+    Route::post('actualizarPortada', [LibroController::class, 'actualizarPortadaLibro']);
     Route::put('eliminar/{libro}', [LibroController::class, 'eliminarLibro']);
 });
 

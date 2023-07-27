@@ -17,7 +17,7 @@ class LibroController extends Controller
         $cantidad = intval($request->per_page);
         $text = $request->nombre;
 
-        $libros = Libro::select('libros.id','libros.titulo_libro','libros.dewey_libro','libros.resena_libro','libros.anio_publi_libro', 'libros.stock_libro','archivos.url')
+        $libros = Libro::select('libros.id','libros.titulo_libro','libros.dewey_libro','libros.resena_libro','libros.anio_publi_libro', 'libros.stock_libro','archivos.url', 'archivos.id as id_portada')
         ->leftJoin('autor_libro', 'libros.id', '=', 'autor_libro.id_libro')
         ->leftJoin('autores', 'autores.id', '=', 'autor_libro.id_autor')
         ->leftJoin('archivos', function ($join) {
@@ -32,7 +32,7 @@ class LibroController extends Controller
         ->selectRaw('GROUP_CONCAT(autor_libro.id_autor) as idAutor')
         ->selectRaw('GROUP_CONCAT(autores.nombre_autor) as nombreAutor')
         ->where('libros.titulo_libro','like',"%$text%")
-        ->groupBy('libros.id','libros.titulo_libro','libros.dewey_libro','libros.resena_libro','libros.anio_publi_libro','libros.stock_libro','archivos.url')
+        ->groupBy('libros.id','libros.titulo_libro','libros.dewey_libro','libros.resena_libro','libros.anio_publi_libro','libros.stock_libro','archivos.url', 'archivos.id')
         ->paginate($cantidad);
 
         $nuevoConjunto = [];
@@ -47,6 +47,7 @@ class LibroController extends Controller
                 "stock_libro" => $libro->stock_libro,
                 "ejemplares" => $libro->ejemplares,
                 "url" =>  $libro->url,
+                "id_portada" =>  $libro->id_portada,
                 "autor" => [
                     "value" => explode(",", $libro->idAutor), 
                     "label" => explode(",", $libro->nombreAutor)
@@ -234,6 +235,47 @@ class LibroController extends Controller
 
             $libro->autores()->sync($request->id_autor);
             
+            return response()->json([
+                'data' => $libro
+            ]);
+
+        } catch (\Exception $e) {
+
+            return response()->json([
+                "message" => 'Por favor hable con el Administrador'
+            ]);
+
+        }
+    }
+
+    public function actualizarPortadaLibro(Request $request)
+    {
+        try {
+
+            $idLibro = $request->input('id_libro');
+            $urlImagen = $request->file('portada')->store('portadas', 'public');
+    
+            // Obtener el libro al que deseas cambiar la portada
+            $libro = Libro::findOrFail($idLibro);
+
+            if ($request->hasFile('portada')) {
+
+                $portada = $request->file('portada');
+                $filename = $portada->getClientOriginalName();
+                $url = $portada->storeAs('portadas', $filename, 'public');
+
+                $file = new Archivo([
+                    'url' => $url,
+                ]);
+                
+                if ($libro->archivo) {
+                    $libro->archivo->delete();
+                }
+                
+                $libro->archivo()->save($file);
+
+            }
+
             return response()->json([
                 'data' => $libro
             ]);
