@@ -95,4 +95,5 @@ Route::middleware(['auth:sanctum'])->prefix('prestamos')->group(function () {
     Route::post('prestar', [PrestamoController::class, 'prestarLibro']);
     Route::get('listar', [PrestamoController::class, 'listarPrestamos']);
     Route::put('devolver/{prestamo}', [PrestamoController::class, 'devolverPrestamos']);
+    Route::put('renovar/{prestamo}', [PrestamoController::class, 'renovarPrestamo']);
 });

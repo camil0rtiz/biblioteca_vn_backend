@@ -62,7 +62,7 @@ class User extends Authenticatable
     //Relacion uno a muchos 
 
     public function prestamos(){
-        return $this->hasMany(Prestamo::class);
+        return $this->hasMany(Prestamo::class, 'id_vecino');
     }
 
     //Relacion uno a muchos con reservas
