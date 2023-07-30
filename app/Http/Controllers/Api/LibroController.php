@@ -31,7 +31,10 @@ class LibroController extends Controller
         }])
         ->selectRaw('GROUP_CONCAT(autor_libro.id_autor) as idAutor')
         ->selectRaw('GROUP_CONCAT(autores.nombre_autor) as nombreAutor')
-        ->where('libros.titulo_libro','like',"%$text%")
+        ->where(function ($query) use ($text) {
+            $query->where('libros.titulo_libro', 'like', "%$text%")
+            ->orWhere('libros.dewey_libro', 'like', "%$text%");
+        })
         ->groupBy('libros.id','libros.titulo_libro','libros.dewey_libro','libros.resena_libro','libros.anio_publi_libro','libros.stock_libro','archivos.url', 'archivos.id')
         ->paginate($cantidad);
 
