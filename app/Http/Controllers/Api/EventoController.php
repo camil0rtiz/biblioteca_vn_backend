@@ -16,7 +16,7 @@ class EventoController extends Controller
         $text = $request->nombre;
 
         $eventos = Evento::select('eventos.id', 'eventos.titulo_evento', 'eventos.descripcion_evento', 'categorias.id as id_categoria', 'categorias.tipo_categoria')
-        ->with('archivos:imageable_id,url')
+        ->with('archivo:id,imageable_id,url')
         ->join('categorias', 'eventos.id_categoria', '=', 'categorias.id')
         ->where('estado_evento','=','1')
         ->where('titulo_evento','like',"%$text%")
@@ -29,7 +29,7 @@ class EventoController extends Controller
 
     public function listarEventosHome()
     {
-        $eventos = Evento::with('archivos')
+        $eventos = Evento::with('archivo')
         ->where('estado_evento', '=', '1')
         ->get();
 
@@ -52,21 +52,19 @@ class EventoController extends Controller
                 'estado_evento' => $data['estado_evento']
             ]);
 
-            if ($request->hasFile('imagenesEvento')) {
+            if ($request->hasFile('eventoImagen')) {
 
-                $archivos = [];
-    
-                foreach ($request->file('imagenesEvento') as $imagen) {
+                $eventoImagen = $request->file('eventoImagen');
 
-                    $filename = $imagen->getClientOriginalName();
+                $filename = $eventoImagen->getClientOriginalName();
 
-                    $path = $imagen->storeAs('eventos', $filename, 'public');
+                $url = $eventoImagen->storeAs('eventos', $filename, 'public');
 
-                    $archivos[] = new Archivo(['url' => $path]);
-
-                }
-    
-                $evento->archivos()->saveMany($archivos);
+                $file = new Archivo([
+                    'url' => $url,
+                ]);
+                
+                $evento->archivo()->save($file);
 
             }
 
@@ -104,6 +102,49 @@ class EventoController extends Controller
         }
     }
 
+    public function actualizarPortadaEvento(Request $request)
+    {
+        try {
+            
+            $idEvento = $request->input('id_evento');
+            $urlImagen = $request->file('portada')->store('eventos', 'public');
+    
+            $evento = Evento::findOrFail($idEvento);
+
+            if ($request->hasFile('portada')) {
+
+                $eventoImagen = $request->file('portada');
+
+                $filename = $eventoImagen->getClientOriginalName();
+
+                $url = $eventoImagen->storeAs('eventos', $filename, 'public');
+
+                $file = new Archivo([
+                    'url' => $url,
+                ]);
+                
+                if ($evento->archivo) {
+                    $evento->archivo->delete();
+                }
+                
+                $evento->archivo()->save($file);
+
+            }
+
+            return response()->json([
+                'data' => $evento
+            ]);
+
+        } catch (\Exception $e) {
+
+            return response()->json([
+                "error" => $e,
+                "message" => 'Por favor hable con el Administrador'
+            ]);
+        
+        }
+    }
+
     public function eliminarEvento(Request $request, Evento $evento)
     {
         try {
@@ -125,3 +166,50 @@ class EventoController extends Controller
     }
 
 }
+
+// public function agregarEvento(Request $request)
+// {
+//     try {
+
+//         $data = $request->all(); 
+
+//         $evento = Evento::create([
+//             'id_categoria' => $data['id_categoria'],
+//             'id_usuario' => $data['id_usuario'],
+//             'titulo_evento' => $data['titulo_evento'],
+//             'descripcion_evento' => $data['descripcion_evento'],
+//             'estado_evento' => $data['estado_evento']
+//         ]);
+
+//         if ($request->hasFile('imagenesEvento')) {
+
+//             $archivos = [];
+
+//             foreach ($request->file('imagenesEvento') as $imagen) {
+
+//                 $filename = $imagen->getClientOriginalName();
+
+//                 $path = $imagen->storeAs('eventos', $filename, 'public');
+
+//                 $archivos[] = new Archivo(['url' => $path]);
+
+//             }
+
+//             $evento->archivos()->saveMany($archivos);
+
+//         }
+
+//         return response()->json([
+//             'data' => $evento
+//         ]);
+
+//     } catch (\Exception $e) {
+
+//         return response()->json([
+//             "error" => $e,
+//             "message" => 'Por favor hable con el Administrador'
+//         ]);
+    
+//     }
+// }
+

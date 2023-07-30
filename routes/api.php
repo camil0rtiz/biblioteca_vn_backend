@@ -78,6 +78,7 @@ Route::middleware(['auth:sanctum'])->prefix('eventos')->group(function () {
     Route::post('agregar', [EventoController::class, 'agregarEvento']);
     Route::get('listar', [EventoController::class, 'listarEventos']);
     Route::put('actualizar/{evento}', [EventoController::class, 'actualizarEvento']);
+    Route::post('actualizarPortada', [EventoController::class, 'actualizarPortadaEvento']);
     Route::put('eliminar/{evento}', [EventoController::class, 'eliminarEvento']);
 });
 

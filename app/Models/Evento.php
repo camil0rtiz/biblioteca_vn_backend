@@ -33,8 +33,8 @@ class Evento extends Model
 
      //relacion polimorfica con archivo
 
-    public function archivos(){
-        return $this->morphMany(Archivo::class, 'imageable');
+    public function archivo(){
+        return $this->morphOne(Archivo::class, 'imageable');
     }
 
 }
