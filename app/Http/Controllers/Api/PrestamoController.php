@@ -66,20 +66,30 @@ class PrestamoController extends Controller
 
             $text = $request->rut;
 
-            $prestamos = Prestamo::select('prestamos.id','prestamos.id_vecino', 'prestamos.id_ejemplar','users.rut_usuario', 'users.nombre_usuario', 'libros.id AS id_libro', 'libros.titulo_libro', 'ejemplares.dewey_unic_ejemplar', 'prestamos.fecha_prestamo', 'prestamos.fecha_entre_prestamo', 'prestamos.estado_prestamo')
+            $prestamos = Prestamo::select('prestamos.id', 'prestamos.id_vecino', 'prestamos.id_ejemplar', 'users.rut_usuario', 'users.nombre_usuario', 'libros.id AS id_libro', 'libros.titulo_libro', 'ejemplares.dewey_unic_ejemplar', 'prestamos.fecha_prestamo', 'prestamos.fecha_entre_prestamo', 'prestamos.estado_prestamo')
             ->join('users', 'prestamos.id_vecino', '=', 'users.id')
-            ->join('ejemplares', 'prestamos.id_ejemplar', '=', 'ejemplares.id')
+            ->leftJoin('ejemplares', 'prestamos.id_ejemplar', '=', 'ejemplares.id')
             ->join('libros', 'libros.id', '=', 'ejemplares.id_libro')
             ->where('users.rut_usuario', '=', $text)
             ->where('prestamos.estado_prestamo', '1')
-            ->groupBy('prestamos.id','prestamos.id_vecino', 'prestamos.id_ejemplar','users.rut_usuario', 'users.nombre_usuario', 'libros.id', 'libros.titulo_libro', 'ejemplares.dewey_unic_ejemplar', 'prestamos.fecha_prestamo', 'prestamos.fecha_entre_prestamo', 'prestamos.estado_prestamo')
+            ->groupBy('prestamos.id', 'prestamos.id_vecino', 'prestamos.id_ejemplar', 'users.rut_usuario', 'users.nombre_usuario', 'libros.id', 'libros.titulo_libro', 'ejemplares.dewey_unic_ejemplar', 'prestamos.fecha_prestamo', 'prestamos.fecha_entre_prestamo', 'prestamos.estado_prestamo')
+            ->with(['ejemplar' => function($query) {
+                $query->select('ejemplares.*', 'libros.titulo_libro')
+                    ->join('libros', 'ejemplares.id_libro', '=', 'libros.id');
+            }])
             ->orderBy('prestamos.id', 'asc')
             ->get();
-    
-            return response()->json([
-                'data' => $ejemplaresDelUsuario
-            ]);
 
+            $prestamos->map(function ($prestamo) {
+                $prestamo->ejemplares = [$prestamo->ejemplar->toArray()];
+                unset($prestamo->ejemplar);
+                return $prestamo;
+            });
+
+            return response()->json([
+                'data' => $prestamos
+            ]);
+    
         }catch (Exception $e) {
 
             return response()->json([

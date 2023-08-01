@@ -37,6 +37,6 @@ class Prestamo extends Model
     //Relacion uno a muchos inversa con ejemplar
 
     public function ejemplar(){
-        return $this->belongsTo(Ejemplare::class);
+        return $this->belongsTo(Ejemplare::class, 'id_ejemplar', 'id');
     }
 }
