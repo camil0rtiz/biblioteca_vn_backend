@@ -20,6 +20,7 @@ Route::get('usuarios/verificar/{registroRut}', [AuthController::class, 'verifica
 Route::post('usuarios/login', [AuthController::class, 'login']);
 
 Route::middleware(['auth:sanctum'])->prefix('usuarios')->group(function () {
+    Route::get('refresh', [AuthController::class, 'refresh']);
     Route::post('logout', [AuthController::class, 'logout']);
     Route::get('listarHabilitados', [AuthController::class, 'listarUsuariosHabilitados']);
     Route::get('listarPendientes', [AuthController::class, 'listarUsuariosPendientes']);

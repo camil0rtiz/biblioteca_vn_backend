@@ -33,7 +33,7 @@ class AuthController extends Controller
             
             $token = $user->createToken('auth_token')->plainTextToken;
             
-            $user = User::select('users.id','users.nombre_usuario', 'users.apellido_pate_usuario', 'users.apellido_mate_usuario', 'roles.tipo_rol' )
+            $user = User::select('users.id','users.nombre_usuario', 'users.apellido_pate_usuario', 'users.apellido_mate_usuario', 'users.estado_usuario', 'roles.tipo_rol' )
                 ->leftJoin('role_user', 'users.id', '=', 'role_user.id_usuario')
                 ->leftJoin('roles', 'roles.id', '=', 'role_user.id_rol')    
                 ->where('rut_usuario', $request['rut_usuario'])->get()->firstOrFail();
@@ -57,6 +57,30 @@ class AuthController extends Controller
         
         $request->user()->currentAccessToken()->delete;
         return response()->json(['message' => 'Token eliminado correctamente'], 200);
+
+    }
+
+    public function refresh(){
+
+        if (Auth::check()) {
+
+            // Obtener el usuario actual autenticado.
+            $user = User::select('users.id', 'users.nombre_usuario', 'users.apellido_pate_usuario', 'users.apellido_mate_usuario', 'users.estado_usuario', 'roles.tipo_rol')
+            ->leftJoin('role_user', 'users.id', '=', 'role_user.id_usuario')
+            ->leftJoin('roles', 'roles.id', '=', 'role_user.id_rol')
+            ->where('users.id', Auth::id())
+            ->first();
+
+            if (!$user) {
+                return response()->json(['error' => 'No se encontró el usuario o datos específicos'], 404);
+            }
+            
+            return response()->json(['user' => $user]);
+
+        } else {
+            // Si el usuario no está autenticado, devuelve una respuesta con estado 401 (No autorizado) u otra acción adecuada según tus necesidades.
+            return response()->json(['error' => 'No autorizado'], 401);
+        }
 
     }
 
@@ -361,22 +385,5 @@ class AuthController extends Controller
         }
     
     }
-
-     // public function eliminarUsuario(User $user){
-        
-    //     try {
-    //         $ifexist = User::where('id', $user->id)->first();
-    //         if ($ifexist != null){
-    //             $usuarios = User::find($user->id)->delete();
-    //             return response()->json(["data" => $usuarios], 200);
-    //         }
-    //         return response()->json(["msg" => "El id del usuario que intenta eliminar no existe"], 401);
-    //     }
-    //     catch (\Exception $e)
-    //     {
-    //         return response()->json(["error" => $e]);
-    //     }
-
-    // }
 
 }
