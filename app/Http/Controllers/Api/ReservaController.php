@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Models\Reserva;
 use App\Models\Libro;
 use App\Models\Ejemplare;
@@ -15,6 +16,30 @@ class ReservaController extends Controller
         
         try {
 
+            $usuario = User::find($request->id_usuario);
+
+            if (!$usuario || $usuario->estado_usuario !== 1) {
+                
+                return response()->json([
+                    "message" => 'Usuario no esta habilitado para reservar libro',
+                ], 400); 
+                
+            }
+
+            $cant_libros_reser = count($request->id_libro);
+
+            $num_de_reser = Reserva::where('id_usuario', $request->id_usuario)
+                                    ->where('estado_reserva', 1)
+                                    ->count();
+
+            if($cant_libros_reser >= ( 2 - $num_de_reser )) {
+
+                return response()->json([
+                    "message" => 'Ya tienes libros reservados',
+                ], 400); 
+
+            }
+            
             foreach($request->id_libro as $libro){
                 
                 $reserva = Reserva::create([
