@@ -77,7 +77,7 @@ class PrestamoController extends Controller
             ->get();
     
             return response()->json([
-                'data' => $prestamos 
+                'data' => $ejemplaresDelUsuario
             ]);
 
         }catch (Exception $e) {
