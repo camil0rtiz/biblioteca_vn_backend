@@ -210,7 +210,9 @@ class LibroController extends Controller
                 'estado_libro' => $data['estado_libro'],
             ]);
 
-            $libro->autores()->attach($data['id_autor']);
+            $idAutores = explode(',', $data['id_autor']);
+
+            $libro->autores()->attach($idAutores);
         
             if($request->hasFile('portada')){
 
