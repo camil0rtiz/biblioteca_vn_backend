@@ -32,7 +32,7 @@ class ReservaController extends Controller
                                     ->where('estado_reserva', 1)
                                     ->count();
 
-            if($cant_libros_reser >= ( 2 - $num_de_reser )) {
+            if($cant_libros_reser > ( 2 - $num_de_reser )) {
 
                 return response()->json([
                     "message" => 'Ya tienes libros reservados',

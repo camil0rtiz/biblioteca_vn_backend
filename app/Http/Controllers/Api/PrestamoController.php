@@ -17,6 +17,41 @@ class PrestamoController extends Controller
         
         try {
 
+            $usuario = User::find($request->id_vecino);
+
+            if (!$usuario || $usuario->estado_usuario !== 1) {
+                
+                return response()->json([
+                    "message" => 'Usuario no esta habilitado para prestar libro',
+                ], 400); 
+                
+            }
+
+            $cant_ejem_reser = count($request->id_ejemplar);
+
+            $num_de_presta = Prestamo::where('id_vecino', $request->id_vecino)
+            ->where('estado_prestamo', 1)
+            ->count();
+
+            if($cant_ejem_reser > ( 2 - $num_de_presta)) {
+
+                return response()->json([
+                    "message" => 'Ya tienes ejemplares prestados',
+                ], 400); 
+
+            }
+
+            foreach ($request->id_ejemplar as $id_ejemplar) {
+                
+                $ejemplar = Ejemplare::find($id_ejemplar);
+        
+                if ($ejemplar && $ejemplar->estado_ejemplar == 2) {
+                    
+                    return response()->json(['error' => 'El ejemplar "' . $ejemplar->dewey_unic_ejemplar . '" no está disponible para prestamo'], 400);
+                
+                } 
+            }
+        
             foreach($request->id_ejemplar as $ejemplar){
                 
                 $prestamo = Prestamo::create([
@@ -47,7 +82,7 @@ class PrestamoController extends Controller
             }
 
             return response()->json([
-                'data' => $request->all()
+                'data' => $prestamo
             ]);
 
         }catch (Exception $e) {
