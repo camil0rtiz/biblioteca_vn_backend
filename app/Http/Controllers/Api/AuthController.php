@@ -355,6 +355,86 @@ class AuthController extends Controller
 
     }
 
+    public function renovarComprobanteHome(Request $request){
+
+        try {
+
+            $data = $request->all();
+
+            $user = User::find($data['id_usuario']);
+
+            if (!$user || $user->estado_usuario != 3) {
+                
+                return response()->json([
+                    "message" => 'Usuario no esta habilitado renovar mebresía.',
+                ], 400); 
+                
+            }
+
+            $urlComprobante1 = $request->file('comprobante1')->store('comprobantes', 'public');
+
+            $urlComprobante2 = $request->file('comprobante2')->store('comprobantes', 'public');
+
+            if($request->hasFile('comprobante1') && $request->hasFile('comprobante2')){
+
+                if ($user->archivos()->count() > 0) {
+                    $user->archivos()->delete();
+                }
+
+                $imagen1 = $request->file('comprobante1');
+                $filename1 = $imagen1->getClientOriginalName();
+                $path1 = $imagen1->storeAs('comprobantes', $filename1, 'public');
+            
+                $imagen2 = $request->file('comprobante2');
+                $filename2 = $imagen2->getClientOriginalName();
+                $path2 = $imagen2->storeAs('comprobantes', $filename2, 'public');
+
+                $archivo1 = new Archivo(['url' => $path1]);
+                $archivo2 = new Archivo(['url' => $path2]);
+                
+                $user->archivos()->saveMany([$archivo1, $archivo2]);
+
+            }
+
+            $user->estado_usuario = $data['estado_usuario'];
+            $user->save();
+
+            $fecha_pago = date('Y-m-d');
+
+            $fecha_vencimiento = null;
+
+            if($request->id_membresia == 1){
+
+                $fecha_vencimiento = strtotime('+12 months', strtotime($fecha_pago));
+                $fecha_vencimiento = date('Y-m-d' , $fecha_vencimiento);
+
+            }elseif($request->id_membresia == 2){
+
+                $fecha_vencimiento = strtotime('+6 months', strtotime($fecha_pago));
+                $fecha_vencimiento = date('Y-m-d' , $fecha_vencimiento);
+
+            }
+
+            $user->membresias()->sync([$data['id_membresia'] => [
+                'fecha_pago_membresia' => $fecha_pago,
+                'fecha_venci_membresia' => $fecha_pago,
+                'fecha_acti_membresia' => $fecha_pago,
+            ]]);
+
+            return response()->json([
+                'data' => $user
+            ]);
+
+        } catch (\Exception $e) {
+
+            return response()->json([
+                "message" => 'Por favor hable con el Administrador'
+            ]);
+
+        }
+
+    }
+
     public function verificarExistenciaUsuario($registroRut)
     {
         $usuario = User::where('rut_usuario', $registroRut)->first();
