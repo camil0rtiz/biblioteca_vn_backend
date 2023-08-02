@@ -39,7 +39,18 @@ class ReservaController extends Controller
                 ], 400); 
 
             }
-            
+
+            foreach ($request->id_libro as $id_libro) {
+                
+                $libro = Libro::find($id_libro);
+        
+                if ($libro && $libro->stock_libro <= 0) {
+                    
+                    return response()->json(['error' => 'El libro "' . $libro->titulo_libro . '" no tiene stock disponible para reserva'], 400);
+                
+                } 
+            }
+        
             foreach($request->id_libro as $libro){
                 
                 $reserva = Reserva::create([
