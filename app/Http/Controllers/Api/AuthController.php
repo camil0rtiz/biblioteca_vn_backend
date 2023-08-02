@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Archivo;
+use App\Models\Reserva;
+use App\Models\Prestamo;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -465,5 +467,37 @@ class AuthController extends Controller
         }
     
     }
+
+    public function estadisticasHome(){
+
+        try {
+
+            $numeroLibrosReservados = Reserva::where('estado_reserva', 1)->count();
+
+            $cantidadUsuariosPendientes = User::where('estado_usuario', 2)->count();
+
+            $cantidadUsuariosVencidos = User::where('estado_usuario', 3)->count();
+
+            $prestamosVencidos = Prestamo::where('estado_prestamo', 3)->count();
+
+            $resultados = [
+                'numero_libros_reservados' => $numeroLibrosReservados,
+                'cantidad_usuarios_pendientes' => $cantidadUsuariosPendientes,
+                'cantidad_usuarios_vencidos' => $cantidadUsuariosVencidos,
+                'prestamos_vencidos' =>  $prestamosVencidos
+            ];
+
+            return response()->json($resultados);
+            
+        } catch (\Exception $e) {
+
+            return response()->json([
+                "message" => 'Por favor hable con el Administrador'
+            ]);
+
+        }
+
+    }
+
 
 }
