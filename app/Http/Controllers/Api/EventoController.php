@@ -30,11 +30,22 @@ class EventoController extends Controller
     public function listarEventosHome()
     {
         $eventos = Evento::with('archivo')
-        ->where('estado_evento', '=', '1')
-        ->get();
+                ->where('id_categoria', 1)
+                ->where('estado_evento', 1)
+                ->get();
+
+        $noticias = Evento::with('archivo')
+                ->where('id_categoria', 2)
+                ->where('estado_evento', 1)
+                ->get();
+
+        $eventosHome = [
+            'eventos' => $eventos,
+            'noticias' => $noticias,
+        ];
 
         return response()->json([
-            'data' => $eventos
+            'data' => $eventosHome
         ]);
     }
 
@@ -166,50 +177,4 @@ class EventoController extends Controller
     }
 
 }
-
-// public function agregarEvento(Request $request)
-// {
-//     try {
-
-//         $data = $request->all(); 
-
-//         $evento = Evento::create([
-//             'id_categoria' => $data['id_categoria'],
-//             'id_usuario' => $data['id_usuario'],
-//             'titulo_evento' => $data['titulo_evento'],
-//             'descripcion_evento' => $data['descripcion_evento'],
-//             'estado_evento' => $data['estado_evento']
-//         ]);
-
-//         if ($request->hasFile('imagenesEvento')) {
-
-//             $archivos = [];
-
-//             foreach ($request->file('imagenesEvento') as $imagen) {
-
-//                 $filename = $imagen->getClientOriginalName();
-
-//                 $path = $imagen->storeAs('eventos', $filename, 'public');
-
-//                 $archivos[] = new Archivo(['url' => $path]);
-
-//             }
-
-//             $evento->archivos()->saveMany($archivos);
-
-//         }
-
-//         return response()->json([
-//             'data' => $evento
-//         ]);
-
-//     } catch (\Exception $e) {
-
-//         return response()->json([
-//             "error" => $e,
-//             "message" => 'Por favor hable con el Administrador'
-//         ]);
-    
-//     }
-// }
 
