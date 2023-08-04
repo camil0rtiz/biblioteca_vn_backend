@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\Libro;
 use App\Models\Archivo;
@@ -17,7 +18,10 @@ class LibroController extends Controller
         $cantidad = intval($request->per_page);
         $text = $request->nombre;
 
-        $libros = Libro::select('libros.id','libros.titulo_libro','libros.dewey_libro','libros.resena_libro','libros.anio_publi_libro', 'libros.stock_libro','archivos.url', 'archivos.id as id_portada')
+        $libros = Libro::select('libros.id','libros.titulo_libro','libros.dewey_libro','libros.resena_libro','libros.anio_publi_libro', 'libros.stock_libro','archivos.url', 'archivos.id as id_portada',
+            DB::raw('(SELECT COUNT(*) FROM ejemplares WHERE ejemplares.id_libro = libros.id AND ejemplares.estado_ejemplar IN (1, 2)) as cantidad_ejemplares'),
+            DB::raw('(SELECT COUNT(*) FROM reservas WHERE reservas.id_libro = libros.id AND reservas.estado_reserva = 1) as cantidad_reservas'
+        ))
         ->leftJoin('autor_libro', 'libros.id', '=', 'autor_libro.id_libro')
         ->leftJoin('autores', 'autores.id', '=', 'autor_libro.id_autor')
         ->leftJoin('archivos', function ($join) {
@@ -51,6 +55,8 @@ class LibroController extends Controller
                 "ejemplares" => $libro->ejemplares,
                 "url" =>  $libro->url,
                 "id_portada" =>  $libro->id_portada,
+                "cantidad_ejemplares" =>  $libro->cantidad_ejemplares,
+                "cantidad_reservas" =>  $libro->cantidad_reservas,
                 "autor" => [
                     "value" => explode(",", $libro->idAutor), 
                     "label" => explode(",", $libro->nombreAutor)

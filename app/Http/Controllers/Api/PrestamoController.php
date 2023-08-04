@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Prestamo;
 use App\Models\Ejemplare;
+use App\Models\Reserva;
 use App\Models\Libro;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -22,7 +23,7 @@ class PrestamoController extends Controller
             if (!$usuario || $usuario->estado_usuario !== 1) {
                 
                 return response()->json([
-                    "message" => 'Usuario no esta habilitado para prestar libro',
+                    "message" => 'Usuario no esta habilitado para prestamo de libro',
                 ], 400); 
                 
             }
@@ -36,7 +37,7 @@ class PrestamoController extends Controller
             if($cant_ejem_reser > ( 2 - $num_de_presta)) {
 
                 return response()->json([
-                    "message" => 'Ya tienes ejemplares prestados',
+                    "message" => 'Usuario ya tiene ejemplares prestados',
                 ], 400); 
 
             }
@@ -65,7 +66,6 @@ class PrestamoController extends Controller
 
                 if($request->descontar_stock == 1){
 
-
                     $ejem = Ejemplare::find($ejemplar);
                     $libro = Libro::find($ejem->id_libro);
                     $libro->stock_libro -= 1;
@@ -73,11 +73,25 @@ class PrestamoController extends Controller
 
                 }
 
-                $ejemplar = Ejemplare::find($ejemplar);
+                $eje = Ejemplare::find($ejemplar);
     
-                $ejemplar->estado_ejemplar = 2;
+                $eje->estado_ejemplar = 2;
                 
-                $ejemplar->save();
+                $eje->save();
+
+            }
+
+            if($request->id_reserva){
+
+                foreach($request->id_reserva as $idReserva){
+
+                    $reserva = Reserva::find($idReserva);
+    
+                    $reserva->estado_reserva = 2; 
+                    
+                    $reserva->save();
+    
+                }
 
             }
 
