@@ -37,7 +37,7 @@ class PrestamoController extends Controller
             if($cant_ejem_reser > ( 2 - $num_de_presta)) {
 
                 return response()->json([
-                    "message" => 'Usuario ya tiene ejemplares prestados',
+                    "message" => 'Usuario ya tiene el máximo de ejemplares prestados',
                 ], 400); 
 
             }
