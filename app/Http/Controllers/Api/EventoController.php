@@ -69,7 +69,7 @@ class EventoController extends Controller
 
                 $filename = $eventoImagen->getClientOriginalName();
 
-                $url = $eventoImagen->storeAs('eventos', $filename, 'public');
+                $url = $eventoImagen->store('eventos', 'public');
 
                 $file = new Archivo([
                     'url' => $url,
@@ -128,7 +128,7 @@ class EventoController extends Controller
 
                 $filename = $eventoImagen->getClientOriginalName();
 
-                $url = $eventoImagen->storeAs('eventos', $filename, 'public');
+                $url = $eventoImagen->store('eventos','public');
 
                 $file = new Archivo([
                     'url' => $url,

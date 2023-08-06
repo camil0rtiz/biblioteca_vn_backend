@@ -283,7 +283,7 @@ class LibroController extends Controller
 
                 $portada = $request->file('portada');
                 $filename = $portada->getClientOriginalName();
-                $url = $portada->storeAs('portadas', $filename, 'public');
+                $url = $portada->store('portadas','public');
 
                 $file = new Archivo([
                     'url' => $url,

@@ -115,30 +115,60 @@ class PrestamoController extends Controller
 
             $text = $request->rut;
 
-            $prestamos = Prestamo::select('prestamos.id', 'prestamos.id_vecino', 'prestamos.id_ejemplar', 'users.rut_usuario', 'users.nombre_usuario', 'libros.id AS id_libro', 'libros.titulo_libro', 'ejemplares.dewey_unic_ejemplar', 'prestamos.fecha_prestamo', 'prestamos.fecha_entre_prestamo', 'prestamos.estado_prestamo')
-            ->join('users', 'prestamos.id_vecino', '=', 'users.id')
-            ->leftJoin('ejemplares', 'prestamos.id_ejemplar', '=', 'ejemplares.id')
-            ->join('libros', 'libros.id', '=', 'ejemplares.id_libro')
-            ->where('users.rut_usuario', '=', $text)
-            ->where('prestamos.estado_prestamo', '1')
-            ->groupBy('prestamos.id', 'prestamos.id_vecino', 'prestamos.id_ejemplar', 'users.rut_usuario', 'users.nombre_usuario', 'libros.id', 'libros.titulo_libro', 'ejemplares.dewey_unic_ejemplar', 'prestamos.fecha_prestamo', 'prestamos.fecha_entre_prestamo', 'prestamos.estado_prestamo')
-            ->with(['ejemplar' => function($query) {
-                $query->select('ejemplares.*', 'libros.titulo_libro')
-                    ->join('libros', 'ejemplares.id_libro', '=', 'libros.id');
-            }])
-            ->orderBy('prestamos.id', 'asc')
-            ->get();
+            if($text != ''){
+                
+                $usuario = User::where('rut_usuario', $text)->first();
 
-            $prestamos->map(function ($prestamo) {
-                $prestamo->ejemplares = [$prestamo->ejemplar->toArray()];
-                unset($prestamo->ejemplar);
-                return $prestamo;
-            });
-
-            return response()->json([
-                'data' => $prestamos
-            ]);
+                if(!$usuario){
     
+                    return response()->json([
+    
+                        "message" => ' El usuario no fue encontrado.',
+                            
+                    ], 400);
+    
+                }
+
+                $prestamos = Prestamo::select('prestamos.id', 'prestamos.id_vecino', 'prestamos.id_ejemplar', 'users.rut_usuario', 'users.nombre_usuario', 'libros.id AS id_libro', 'libros.titulo_libro', 'ejemplares.dewey_unic_ejemplar', 'prestamos.fecha_prestamo', 'prestamos.fecha_entre_prestamo', 'prestamos.estado_prestamo')
+                ->join('users', 'prestamos.id_vecino', '=', 'users.id')
+                ->leftJoin('ejemplares', 'prestamos.id_ejemplar', '=', 'ejemplares.id')
+                ->join('libros', 'libros.id', '=', 'ejemplares.id_libro')
+                ->where('users.rut_usuario', '=', $text)
+                ->where('prestamos.estado_prestamo', '1')
+                ->groupBy('prestamos.id', 'prestamos.id_vecino', 'prestamos.id_ejemplar', 'users.rut_usuario', 'users.nombre_usuario', 'libros.id', 'libros.titulo_libro', 'ejemplares.dewey_unic_ejemplar', 'prestamos.fecha_prestamo', 'prestamos.fecha_entre_prestamo', 'prestamos.estado_prestamo')
+                ->with(['ejemplar' => function($query) {
+                    $query->select('ejemplares.*', 'libros.titulo_libro')
+                        ->join('libros', 'ejemplares.id_libro', '=', 'libros.id');
+                }])
+                ->orderBy('prestamos.id', 'asc')
+                ->get();
+    
+                $conteoPrestamos = $prestamos->count();
+    
+                if ($conteoPrestamos == 0){
+    
+                    return response()->json([
+        
+                        "message" => ' El usuario no tiene prestamos vigentes.',
+                            
+                    ], 400);
+    
+                }
+    
+                $prestamos->map(function ($prestamo) {
+                    $prestamo->ejemplares = [$prestamo->ejemplar->toArray()];
+                    unset($prestamo->ejemplar);
+                    return $prestamo;
+                });
+    
+                return response()->json([
+                    'data' => $prestamos
+                ]);
+
+            }else{
+                return;
+            }
+
         }catch (Exception $e) {
 
             return response()->json([

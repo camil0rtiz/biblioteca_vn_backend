@@ -85,25 +85,58 @@ class ReservaController extends Controller
 
         $text = $request->rut;
 
-        $reservas = Reserva::select('reservas.id', 'reservas.id_libro' , 'reservas.id_usuario', 'reservas.fecha_reserva', 'reservas.estado_reserva','users.rut_usuario' ,'users.nombre_usuario', 'users.apellido_pate_usuario','libros.titulo_libro')
-        ->join('users', 'reservas.id_usuario', '=', 'users.id')
-        ->join('libros', 'reservas.id_libro', '=', 'libros.id')
-        ->join('ejemplares', 'libros.id', '=', 'ejemplares.id_libro')
-        ->where('reservas.estado_reserva', '1')
-        ->where('users.rut_usuario', '=', $text)
-        ->groupBy('reservas.id', 'reservas.id_libro' , 'reservas.id_usuario', 'reservas.fecha_reserva', 'reservas.estado_reserva' ,'users.rut_usuario', 'users.nombre_usuario',  'users.apellido_pate_usuario', 'libros.titulo_libro')
-        ->orderBy('reservas.id', 'asc')
-        ->get();
+        if($text != ''){
 
-        foreach ($reservas as $reserva) {
-            $reserva->ejemplares = Ejemplare::where('id_libro', $reserva->id_libro)
-            ->where('estado_ejemplar', 1)
+            $usuario = User::where('rut_usuario', $text)->first();
+    
+            if(!$usuario){
+        
+                return response()->json([
+        
+                    "message" => ' El usuario no fue encontrado.',
+                        
+                ], 400);
+        
+            }
+    
+            $reservas = Reserva::select('reservas.id', 'reservas.id_libro' , 'reservas.id_usuario', 'reservas.fecha_reserva', 'reservas.estado_reserva','users.rut_usuario' ,'users.nombre_usuario', 'users.apellido_pate_usuario','libros.titulo_libro')
+            ->join('users', 'reservas.id_usuario', '=', 'users.id')
+            ->join('libros', 'reservas.id_libro', '=', 'libros.id')
+            ->join('ejemplares', 'libros.id', '=', 'ejemplares.id_libro')
+            ->where('reservas.estado_reserva', '1')
+            ->where('users.rut_usuario', '=', $text)
+            ->groupBy('reservas.id', 'reservas.id_libro' , 'reservas.id_usuario', 'reservas.fecha_reserva', 'reservas.estado_reserva' ,'users.rut_usuario', 'users.nombre_usuario',  'users.apellido_pate_usuario', 'libros.titulo_libro')
+            ->orderBy('reservas.id', 'asc')
             ->get();
+    
+            $conteoReservas = $reservas->count();
+        
+                if ($conteoReservas == 0){
+    
+                    return response()->json([
+        
+                        "message" => ' El usuario no tiene reservas vigentes.',
+                            
+                    ], 400);
+    
+                }
+    
+            foreach ($reservas as $reserva) {
+                $reserva->ejemplares = Ejemplare::where('id_libro', $reserva->id_libro)
+                ->where('estado_ejemplar', 1)
+                ->get();
+            }
+    
+            return response()->json([
+                'data' => $reservas
+            ]);
+            
+        }else{
+
+            return;
+
         }
 
-        return response()->json([
-            'data' => $reservas
-        ]);
 
     }
 
