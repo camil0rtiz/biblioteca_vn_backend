@@ -134,7 +134,7 @@ class PrestamoController extends Controller
                 ->leftJoin('ejemplares', 'prestamos.id_ejemplar', '=', 'ejemplares.id')
                 ->join('libros', 'libros.id', '=', 'ejemplares.id_libro')
                 ->where('users.rut_usuario', '=', $text)
-                ->where('prestamos.estado_prestamo', '1')
+                ->whereIn('prestamos.estado_prestamo', [1, 3])
                 ->groupBy('prestamos.id', 'prestamos.id_vecino', 'prestamos.id_ejemplar', 'users.rut_usuario', 'users.nombre_usuario', 'libros.id', 'libros.titulo_libro', 'ejemplares.dewey_unic_ejemplar', 'prestamos.fecha_prestamo', 'prestamos.fecha_entre_prestamo', 'prestamos.estado_prestamo')
                 ->with(['ejemplar' => function($query) {
                     $query->select('ejemplares.*', 'libros.titulo_libro')

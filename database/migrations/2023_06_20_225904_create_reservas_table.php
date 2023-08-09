@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreign('id_usuario')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('id_libro')->references('id')->on('libros')->onDelete('cascade');
             $table->dateTime('fecha_reserva')->nullable();
+            $table->dateTime('fecha_fin_reserva')->nullable();
             $table->tinyInteger('estado_reserva')->nullable();
             $table->timestamps();
         });

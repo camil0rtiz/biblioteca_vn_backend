@@ -5,6 +5,9 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+
 
 class UserSeeder extends Seeder
 {
@@ -15,31 +18,18 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        // User::Create([
-        //     'rut_usuario' => '194176163',
-        //     'email_usuario' => 'camilo@gmail.com' 
-        // ]);
+        $userId = DB::table('users')->insertGetId([
+            'rut_usuario' => '11111111-1',
+            'password' => Hash::make('123456789'),
+            'nombre_usuario' => 'Admin',
+            'apellido_pate_usuario' => 'Admin',
+            'email' => 'admin@gmail.com',
+            'estado_usuario' => 1
+        ]);
 
-        User::factory(99)->create()->each(function(User $user){
-
-            $user->roles()->attach([
-                rand(5,8),
-                rand(2,8)
-            ]);
-
-        });
-
-        User::factory(100)->create()->each(function(User $user){
-        
-            $user->membresias()->attach([
-                rand(5,8),
-                rand(2,8),], [
-                    'fecha_pago_paga' => today(),
-                    'fecha_venci_paga' => today(),
-                    'fecha_acti_paga' => today(),
-                ],
-            );
-
-        });
+        DB::table('role_user')->insert([
+            'id_rol' => $userId,
+            'id_usuario' => 1,
+        ]);
     }
 }

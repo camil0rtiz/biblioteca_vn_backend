@@ -33,8 +33,8 @@ class prestamosVencidos extends Command
             ->get();
 
         foreach ($prestamosVencidos as $prestamo) {
-    
-            $prestamo->update(['estado_prestamo' => 2]);
+
+            $prestamo->update(['estado_prestamo' => 3]);
 
         }
 

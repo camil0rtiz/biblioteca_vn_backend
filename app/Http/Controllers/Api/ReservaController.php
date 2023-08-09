@@ -57,6 +57,7 @@ class ReservaController extends Controller
                     'id_usuario' => $request->id_usuario,
                     'id_libro'=> $libro,
                     'fecha_reserva' => date('Y-m-d'),
+                    'fecha_fin_reserva' => date('Y-m-d', strtotime('+15 days')),
                     'estado_reserva' => $request->estado_reserva,
                 ]);
 

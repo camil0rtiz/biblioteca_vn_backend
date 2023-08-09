@@ -118,19 +118,19 @@ class AuthController extends Controller
 
             $fecha_pago = date('Y-m-d');
 
+            if($data['id_membresia'] == 1){
+
+                $fecha_vencimiento = strtotime('+12 months', strtotime($fecha_pago));
+                $fecha_vencimiento = date('Y-m-d' , $fecha_vencimiento);
+
+            }elseif($data['id_membresia'] == 2){
+
+                $fecha_vencimiento = strtotime('+6 months', strtotime($fecha_pago));
+                $fecha_vencimiento = date('Y-m-d' , $fecha_vencimiento);
+
+            }
+
             if($data['estado_usuario'] == 1){
-
-                if($data['id_membresia'] == 1){
-
-                    $fecha_vencimiento = strtotime('+12 months', strtotime($fecha_pago));
-                    $fecha_vencimiento = date('Y-m-d' , $fecha_vencimiento);
-
-                }elseif($data['id_membresia'] == 2){
-    
-                    $fecha_vencimiento = strtotime('+6 months', strtotime($fecha_pago));
-                    $fecha_vencimiento = date('Y-m-d' , $fecha_vencimiento);
-    
-                }
 
                 $user->membresias()->attach($data['id_membresia'], [
                     'fecha_pago_membresia' => $fecha_pago,
@@ -142,7 +142,7 @@ class AuthController extends Controller
 
                 $user->membresias()->attach($data['id_membresia'], [
                     'fecha_pago_membresia' => $fecha_pago,
-                    'fecha_venci_membresia' => $fecha_pago,
+                    'fecha_venci_membresia' => $fecha_vencimiento,
                     'fecha_acti_membresia' => $fecha_pago,
                 ]);
 
@@ -156,11 +156,11 @@ class AuthController extends Controller
 
                 $imagen1 = $request->file('comprobante1');
                 $filename1 = $imagen1->getClientOriginalName();
-                $path1 = $imagen1->storeAs('comprobantes', $filename1, 'public');
+                $path1 = $imagen1->store('comprobantes','public');
             
                 $imagen2 = $request->file('comprobante2');
                 $filename2 = $imagen2->getClientOriginalName();
-                $path2 = $imagen2->storeAs('comprobantes', $filename2, 'public');
+                $path2 = $imagen2->store('comprobantes','public');
             
                 $archivo1 = new Archivo(['url' => $path1]);
                 $archivo2 = new Archivo(['url' => $path2]);
@@ -385,11 +385,11 @@ class AuthController extends Controller
 
                 $imagen1 = $request->file('comprobante1');
                 $filename1 = $imagen1->getClientOriginalName();
-                $path1 = $imagen1->storeAs('comprobantes', $filename1, 'public');
+                $path1 = $imagen1->store('comprobantes','public');
             
                 $imagen2 = $request->file('comprobante2');
                 $filename2 = $imagen2->getClientOriginalName();
-                $path2 = $imagen2->storeAs('comprobantes', $filename2, 'public');
+                $path2 = $imagen2->store('comprobantes','public');
 
                 $archivo1 = new Archivo(['url' => $path1]);
                 $archivo2 = new Archivo(['url' => $path2]);

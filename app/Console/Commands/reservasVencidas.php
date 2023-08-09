@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Models\Reserva;
-use Carbon\Carbon;
+use App\Models\Libro;
 
 class reservasVencidas extends Command
 {
@@ -20,7 +20,7 @@ class reservasVencidas extends Command
      *
      * @var string
      */
-    protected $description = 'Cambiar estado de reservas después de 15 días';
+    protected $description = 'Cambiar estado de la reserva cuando esta se venza';
 
     /**
      * Execute the console command.
@@ -29,16 +29,26 @@ class reservasVencidas extends Command
      */
     public function handle()
     {
-        // $limiteDias = 15;
+        
+        $reservasPorVencer = Reserva::where('estado_reserva', 1)
+            ->where('fecha_fin_reserva', '<', now())
+            ->get();
 
-        // $reservasPorVencer = Reserva::where('estado_reserva', 1)
-        //     ->whereDate('fecha_reserva', '<=', Carbon::now()->subDays($limiteDias))
-        //     ->get();
+        foreach ($reservasPorVencer as $reserva) {
 
-        // foreach ($reservasPorVencer as $reserva) {
+            $libroId = $reserva->id_libro; 
+
+            $libro = Libro::find($libroId);
+
+            $libro->stock_libro += 1;
             
-        //     $reserva->update(['estado_reserva' => 4]);
+            $libro->save();
 
-        // }
+            $reserva->update(['estado_reserva' => 4]);
+
+        }
+
+        $this->info('Tarea completada: Estados de reservas actualizados cuando se venció el periodo.');
+
     }
 }

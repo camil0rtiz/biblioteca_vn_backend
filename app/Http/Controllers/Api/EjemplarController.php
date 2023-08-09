@@ -73,6 +73,14 @@ class EjemplarController extends Controller
     public function eliminarEjemplar(Request $request, Ejemplare $ejemplare)
     {
 
+        $libroId = $ejemplare->id_libro; 
+
+        $libro = Libro::find($libroId);
+
+        $libro->stock_libro -= 1;
+        
+        $libro->save();
+
         $ejemplare->update($request->all());
 
         return response()->json([

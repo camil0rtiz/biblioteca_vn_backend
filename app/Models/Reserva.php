@@ -15,6 +15,7 @@ class Reserva extends Model
         'id_usuario',
         'id_libro',
         'fecha_reserva',
+        'fecha_fin_reserva',
         'estado_reserva'
     ];
 
